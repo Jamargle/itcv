@@ -52,9 +52,9 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
 
     // region testing dependencies
-    testImplementation "androidx.test.ext:junit:$versions.junitVersion"
+    testImplementation "androidx.test.ext:junit:$versions.androidXJunitVersion"
     testImplementation "io.mockk:mockk:$versions.mockkVersion"
-    androidTestImplementation "androidx.test:runner:$versions.test_version"
+    androidTestImplementation "androidx.test:runner:$versions.testVersion"
     androidTestImplementation "androidx.test:rules:$versions.testVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCoreVersion"
     androidTestImplementation "io.mockk:mockk-android:$versions.mockkVersion"
