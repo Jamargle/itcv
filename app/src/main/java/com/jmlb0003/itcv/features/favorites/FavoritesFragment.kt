@@ -1,4 +1,4 @@
-package com.jmlb0003.itcv.ui.favorites
+package com.jmlb0003.itcv.features.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
