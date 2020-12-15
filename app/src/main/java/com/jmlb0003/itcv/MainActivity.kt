@@ -2,10 +2,9 @@ package com.jmlb0003.itcv
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -47,14 +46,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        setupNavigation()
+    }
 
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val tabs = setOf(R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-        val appBarConfiguration = AppBarConfiguration(tabs)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+    private fun setupNavigation() {
+        findViewById<BottomNavigationView>(R.id.bottom_navigation_view)?.let { bottomNavigationView ->
+            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.navController?.let { navigationController ->
+                val appBarConfiguration = AppBarConfiguration(
+                    setOf(
+                        R.id.navigation_home,
+                        R.id.navigation_favorites,
+                        R.id.navigation_settings
+                    )
+                )
+                NavigationUI.setupActionBarWithNavController(this, navigationController, appBarConfiguration)
+                NavigationUI.setupWithNavController(bottomNavigationView, navigationController)
+            }
+        }
     }
 }
