@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.features.profile.ProfileDetailsFragment.Companion.getProfileDetailsBundle
 import com.jmlb0003.itcv.features.search.adapter.SearchResult
 import com.jmlb0003.itcv.features.search.adapter.SearchResultsAdapter
 import com.jmlb0003.itcv.utils.FragmentActivity.showSoftKeyboard
@@ -43,8 +44,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun initSearchResultsView(rootView: View) {
         rootView.findViewById<RecyclerView>(R.id.search_results_list)?.let { recyclerView ->
             recyclerView.adapter = SearchResultsAdapter(
-                // TODO Pass the clicked result to open the details screen
-                onResultClicked = { view?.findNavController()?.navigate(R.id.navigation_search_to_details) }
+                onResultClicked = {
+                    // TODO Pass the clicked result to open the details screen
+                    view?.findNavController()?.navigate(
+                        R.id.navigation_search_to_details,
+                        getProfileDetailsBundle(it.profileName)
+                    )
+                }
             ).also { adapter = it }
         }
     }

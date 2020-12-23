@@ -18,4 +18,8 @@
     <string name="title_search">Search</string>
     <string name="search_hint">Look for a Github profile</string>
 
+
+    <!--  Profile details  -->
+    <string name="title_profile_details">Profile Details</string>
+
 </resources>
