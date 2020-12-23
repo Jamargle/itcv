@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.jmlb0003.itcv.R
 
-class SearchResultsAdapter : ListAdapter<SearchResult, SearchResultViewHolder>(SearchResultDiffCallback) {
+class SearchResultsAdapter(
+    private val onResultClicked: (SearchResult) -> Unit
+) : ListAdapter<SearchResult, SearchResultViewHolder>(SearchResultDiffCallback) {
 
     fun setSearchResults(results: List<SearchResult>) {
         submitList(results)
@@ -16,6 +18,11 @@ class SearchResultsAdapter : ListAdapter<SearchResult, SearchResultViewHolder>(S
     )
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        holder.bindView(getItem(position))
+        with(holder) {
+            getItem(position)?.let { searchResult ->
+                bindView(searchResult)
+                itemView.setOnClickListener { onResultClicked(searchResult) }
+            }
+        }
     }
 }

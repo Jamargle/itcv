@@ -33,7 +33,14 @@
         android:id="@+id/navigation_search"
         android:name="com.jmlb0003.itcv.features.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+
+        <!--    TODO Navigate to profile details screen    -->
+        <action
+            android:id="@+id/navigation_search_to_details"
+            app:destination="@id/navigation_favorites" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/itemFragment"
