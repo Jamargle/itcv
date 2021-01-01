@@ -1,6 +1,29 @@
 <resources>
     <string name="app_name">ITCV</string>
+
+    <!--  Home  -->
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="content_description_home_fab">Search</string>
+
+
+    <!--  Favorites  -->
+    <string name="title_favorites">Favorites</string>
+
+
+    <!--  Search  -->
+    <string name="title_search">Search</string>
+    <string name="search_hint">Look for a Github profile</string>
+
+
+    <!--  Profile details  -->
+    <string name="title_profile_details">Profile Details</string>
+
+
+    <!--  Settings  -->
+    <string name="title_settings">Settings</string>
+    <string name="settings_about">About this app</string>
+
+    <!--  About this app  -->
+    <string name="title_about">About ITCV</string>
+
 </resources>

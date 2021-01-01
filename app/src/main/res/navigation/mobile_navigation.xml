@@ -7,24 +7,56 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.jmlb0003.itcv.ui.home.HomeFragment"
+        android:name="com.jmlb0003.itcv.features.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/navigation_home_to_search_by_fab"
+            app:destination="@id/navigation_search" />
+
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.jmlb0003.itcv.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_favorites"
+        android:name="com.jmlb0003.itcv.features.favorites.FavoritesFragment"
+        android:label="@string/title_favorites"
+        tools:layout="@layout/fragment_favorites" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.jmlb0003.itcv.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_settings"
+        android:name="com.jmlb0003.itcv.features.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/navigation_settings_to_about"
+            app:destination="@id/navigation_about" />
+
+    </fragment>
+
     <fragment
-        android:id="@+id/itemFragment"
-        android:name="com.jmlb0003.itcv.ItemFragment"
-        android:label="fragment_item_list"
-        tools:layout="@layout/fragment_item_list" />
+        android:id="@+id/navigation_about"
+        android:name="com.jmlb0003.itcv.features.about.AboutFragment"
+        android:label="@string/title_about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.jmlb0003.itcv.features.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/navigation_search_to_details"
+            app:destination="@id/navigation_profile_details" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile_details"
+        android:name="com.jmlb0003.itcv.features.profile.ProfileDetailsFragment"
+        android:label="@string/title_profile_details"
+        tools:layout="@layout/fragment_profile_details" />
+
 </navigation>
