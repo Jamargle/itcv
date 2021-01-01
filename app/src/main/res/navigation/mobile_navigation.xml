@@ -47,9 +47,4 @@
         android:label="@string/title_profile_details"
         tools:layout="@layout/fragment_profile_details" />
 
-    <fragment
-        android:id="@+id/itemFragment"
-        android:name="com.jmlb0003.itcv.ItemFragment"
-        android:label="fragment_item_list"
-        tools:layout="@layout/fragment_item_list" />
 </navigation>
