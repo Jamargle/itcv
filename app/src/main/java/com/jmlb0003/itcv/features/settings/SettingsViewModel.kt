@@ -1,13 +1,22 @@
 package com.jmlb0003.itcv.features.settings
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.jmlb0003.itcv.core.mvp.MVPViewModel
 
-class SettingsViewModel : ViewModel() {
+class SettingsViewModel(
+    presenter: SettingsPresenter,
+    viewState: SettingsViewState
+) : MVPViewModel<SettingsPresenter, SettingsViewState>(presenter, viewState) {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is settings Fragment"
+    class Factory(private val injector: SettingsInjector) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>) =
+            SettingsViewModel(injector.presenter, injector.viewState)
+                    as? T
+                ?: throw IllegalArgumentException("This factory can only create SettingsViewModel instances")
     }
-    val text: LiveData<String> = _text
 }
+
+fun getSettingsViewModelFactory(scope: SettingsFragment) =
+    SettingsViewModel.Factory(getSettingsInjector(scope))
