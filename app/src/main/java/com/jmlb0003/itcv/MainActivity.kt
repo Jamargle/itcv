@@ -2,6 +2,7 @@ package com.jmlb0003.itcv
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -51,12 +52,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initToolbar()
         setupNavigation()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(toolbarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun initToolbar() {
+        findViewById<Toolbar>(R.id.main_toolbar)?.let { setSupportActionBar(it) }
     }
 
     private fun setupNavigation() {

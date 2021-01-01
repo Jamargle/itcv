@@ -4,10 +4,9 @@
     android:id="@+id/search_result_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_default"
+    android:background="?selectableItemBackground"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin">
+    android:padding="@dimen/margin_default">
 
     <TextView
         android:id="@+id/profile_name"
