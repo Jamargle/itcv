@@ -22,6 +22,8 @@ def _versions = [
         // Coroutines
         coroutinesVersion           : '1.3.9',
 
+        retrofitVersion             : '2.9.0',
+        loggingInterceptorVersion   : '4.2.1',
         canaryLeakVersion           : '2.4',
 
         //Testing
