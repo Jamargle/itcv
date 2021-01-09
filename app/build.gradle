@@ -51,7 +51,6 @@ dependencies {
     //region Retrofit
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$versions.loggingInterceptorVersion"
     //endregion
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutinesVersion"
