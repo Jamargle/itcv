@@ -22,7 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initViews(rootView: View) {
-        textView = rootView.findViewById(R.id.text_home)
+        textView = rootView.findViewById(R.id.username)
         viewModel.text.observe(viewLifecycleOwner, Observer {
             textView?.text = it
         })
