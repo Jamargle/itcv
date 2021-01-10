@@ -9,13 +9,14 @@
     <ImageView
         android:id="@+id/github_avatar"
         android:layout_width="@dimen/home_avatar_image_size"
-        android:layout_height="@dimen/home_avatar_image_size"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_default"
         android:contentDescription="@string/home_github_avatar_content_description"
-        android:textAlignment="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_avatar_placeholder"
         android:textAppearance="?attr/textAppearanceHeadline5"
         app:layout_constraintBottom_toTopOf="@id/github_avatar_horizontal_barrier"
-        app:layout_constraintEnd_toStartOf="@id/username"
+        app:layout_constraintEnd_toStartOf="@id/github_avatar_vertical_barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
@@ -29,32 +30,17 @@
         app:constraint_referenced_ids="github_avatar" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginBottom="@dimen/margin_default"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        app:layout_constraintBottom_toTopOf="@id/user_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/github_avatar_vertical_barrier"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="This is the username" />
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:textAppearance="?attr/textAppearanceHeadline6"
         app:layout_constraintBottom_toTopOf="@id/user_location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/github_avatar_vertical_barrier"
-        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Name of the user" />
 
