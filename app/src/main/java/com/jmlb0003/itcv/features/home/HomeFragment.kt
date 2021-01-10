@@ -3,36 +3,74 @@ package com.jmlb0003.itcv.features.home
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.domain.model.User
+import com.jmlb0003.itcv.features.MainToolbarController
+import com.jmlb0003.itcv.utils.showErrorPopup
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    private val viewModel by viewModels<HomeViewModel>()
+    private val onViewStateChange = Observer<HomeViewStateList> { handleViewChange(it) }
 
-    private var textView: TextView? = null
+    private val viewModel by viewModels<HomeViewModel> { getHomeViewModelFactory(this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViews(view)
+        initViewObservers()
     }
 
     private fun initViews(rootView: View) {
-        textView = rootView.findViewById(R.id.username)
-        viewModel.text.observe(viewLifecycleOwner, Observer {
-            textView?.text = it
-        })
-
         rootView.findViewById<FloatingActionButton>(R.id.home_fab)?.let {
             it.setOnClickListener {
                 findNavController().navigate(R.id.navigation_home_to_search_by_fab)
-
-                Toast.makeText(requireContext(), "Display search!!", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    private fun initViewObservers() {
+        with(viewModel.nonNullViewState) {
+            viewState.observe(viewLifecycleOwner, onViewStateChange)
+        }
+    }
+
+    private fun handleViewChange(newState: HomeViewStateList) {
+        when (newState) {
+            is HomeViewStateList.Ready -> displayProfileInfo(newState.user)
+            is HomeViewStateList.Error -> displayErrorScreen(newState.errorStringRes)
+        }
+    }
+
+    private fun displayProfileInfo(user: User) {
+        with(user) {
+            activityViewModels<MainToolbarController>().value.setNewTitle(username)
+
+            view?.findViewById<TextView>(R.id.user_name)?.text = name
+            view?.findViewById<TextView>(R.id.user_location)?.text = location
+//            view?.findViewById<TextView>(R.id.user_bio)?.text = user_bio
+            view?.findViewById<TextView>(R.id.user_email)?.text = email
+//            view?.findViewById<TextView>(R.id.user_web)?.text = user_web
+//            view?.findViewById<TextView>(R.id.twitter_username)?.text = twitter_username
+            view?.findViewById<TextView>(R.id.public_repos_count)?.text =
+                getString(R.string.home_repository_count_label, repositoryCount)
+//            view?.findViewById<TextView>(R.id.followers_count)?.text = followers_count
+//            view?.findViewById<TextView>(R.id.member_since)?.text = member_since
+
+            // TODO add missing information
+        }
+    }
+
+    private fun displayErrorScreen(errorStringRes: Int) {
+        activity?.showErrorPopup(
+            errorMessage = getErrorMessage(errorStringRes),
+            onNegativeButtonClicked = { /* NO-OP */ }
+        )
+    }
+
+    private fun getErrorMessage(error: Int) = getString(error)
 }
