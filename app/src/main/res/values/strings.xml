@@ -3,6 +3,8 @@
 
     <!--  Home  -->
     <string name="title_home">Home</string>
+    <string name="home_repository_count_label">This user has %d public repositories</string>
+    <string name="home_github_avatar_content_description">Github avatar for this profile</string>
     <string name="content_description_home_fab">Search</string>
 
 
@@ -25,5 +27,13 @@
 
     <!--  About this app  -->
     <string name="title_about">About ITCV</string>
+
+
+    <!--  Generic  -->
+    <string name="error_dialog_title">Sorry…</string>
+    <string name="error_dialog_generic_message">Something went wrong.</string>
+    <string name="error_dialog_no_network">You need a Internet connection.</string>
+    <string name="error_dialog_positive_button">OK</string>
+    <string name="error_dialog_negative_button">Close</string>
 
 </resources>

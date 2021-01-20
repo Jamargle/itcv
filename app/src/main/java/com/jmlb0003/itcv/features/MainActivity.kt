@@ -1,8 +1,10 @@
-package com.jmlb0003.itcv
+package com.jmlb0003.itcv.features
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -11,10 +13,13 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.jmlb0003.itcv.R
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbarConfiguration: AppBarConfiguration
+
+    private val toolbarController by viewModels<MainToolbarController>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         findViewById<Toolbar>(R.id.main_toolbar)?.let { setSupportActionBar(it) }
+        toolbarController.getTitleChangeTrigger().observe(this, Observer { supportActionBar?.title = it })
+        toolbarController.getTitleResChangeTrigger().observe(this, Observer { supportActionBar?.setTitle(it) })
     }
 
     private fun setupNavigation() {
