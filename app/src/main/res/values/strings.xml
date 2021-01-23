@@ -19,7 +19,10 @@
 
 
     <!--  Profile details  -->
-    <string name="title_profile_details">Profile Details</string>
+    <string name="profile_details_title_profile_details">Profile Details</string>
+    <string name="profile_details_repository_list_title">Repositories</string>
+    <string name="profile_details_repository_link_button">See repository</string>
+    <string name="profile_details_repository_website_link_button">See website</string>
 
 
     <!--  Settings  -->
