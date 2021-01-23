@@ -6,6 +6,7 @@
     <string name="home_repository_count_label">This user has %d public repositories</string>
     <string name="home_github_avatar_content_description">Github avatar for this profile</string>
     <string name="content_description_home_fab">Search</string>
+    <string name="home_profile_all_details_button">See all details</string>
 
 
     <!--  Favorites  -->

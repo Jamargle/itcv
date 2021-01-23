@@ -29,7 +29,7 @@ class HomePresenterTest {
     private val usersRepository = mockk<UserRepository>(relaxed = true)
     private val getUserProfileUseCase = GetUserProfileUseCase(usersRepository)
 
-//    private val presenter = HomePresenter(viewState, getUserProfileUseCase, dispatchers)
+    private val presenter = HomePresenter(viewState, getUserProfileUseCase, dispatchers)
 
     @Test
     fun `on init fetches profile info and displays if succeeded`() {

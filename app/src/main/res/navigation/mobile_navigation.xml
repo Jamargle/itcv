@@ -14,6 +14,10 @@
             android:id="@+id/navigation_home_to_search_by_fab"
             app:destination="@id/navigation_search" />
 
+        <action
+            android:id="@+id/navigation_profile_to_details"
+            app:destination="@id/navigation_profile_details" />
+
     </fragment>
 
     <fragment
