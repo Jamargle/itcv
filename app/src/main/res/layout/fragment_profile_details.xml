@@ -19,22 +19,40 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_avatar_placeholder"
             android:textAppearance="?attr/textAppearanceHeadline5"
-            app:layout_constraintBottom_toTopOf="@id/member_since"
+            app:layout_constraintBottom_toTopOf="@id/member_since_title"
             app:layout_constraintEnd_toStartOf="@id/github_avatar_vertical_barrier"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/member_since"
-            android:layout_width="0dp"
+            android:id="@+id/member_since_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:text="@string/profile_details_member_since_title"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintBottom_toTopOf="@id/member_since"
+            app:layout_constraintEnd_toStartOf="@id/github_avatar_vertical_barrier"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/github_avatar" />
+
+        <TextView
+            android:id="@+id/member_since"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
             app:layout_constraintBottom_toTopOf="@id/github_avatar_horizontal_barrier"
             app:layout_constraintEnd_toStartOf="@id/github_avatar_vertical_barrier"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/github_avatar"
-            tools:text="Member since: 31/12/1001" />
+            app:layout_constraintTop_toBottomOf="@id/member_since_title"
+            tools:text="31 Dec 2021" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/github_avatar_vertical_barrier"

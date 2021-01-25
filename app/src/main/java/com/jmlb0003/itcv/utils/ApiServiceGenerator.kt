@@ -1,7 +1,6 @@
 package com.jmlb0003.itcv.utils
 
 import com.google.gson.GsonBuilder
-import com.jmlb0003.itcv.BuildConfig
 import com.jmlb0003.itcv.utils.DateExtensions.BACKEND_DATE_FORMAT
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

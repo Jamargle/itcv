@@ -43,9 +43,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun getCurrentProfileName(): String {
+    private fun getCurrentProfileName(): User {
         // TODO This needs to come from somewhere
-        return "Jamargle"
+//        return "Jamargle"
+        return user!!
     }
 
     private fun initViewObservers() {
@@ -61,7 +62,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    // TODO this is to be removed once the navigation from presenter is implemented
+    private var user: User? = null
     private fun displayProfileInfo(user: User) {
+        this.user = user
         with(user) {
             activityViewModels<MainToolbarController>().value.setNewTitle(username)
 

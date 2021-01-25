@@ -10,6 +10,7 @@ object UserMappers {
             User(
                 username = username,
                 name = name,
+                memberSince = profileCreatedDate,
                 repositoryCount = reposCount,
                 email = email ?: "",
                 location = location ?: ""
