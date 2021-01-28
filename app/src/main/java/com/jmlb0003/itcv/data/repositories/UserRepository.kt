@@ -11,11 +11,8 @@ class UserRepository(
 ) {
 
     fun getUser(username: String): Either<Failure, User> =
-        with(userService.getUserProfile(username)) {
-            if (this is Either.Right) {
-                Either.Right(UserMappers.mapToDomain(rightValue))
-            } else {
-                this as Either.Left
-            }
+        when (val result = userService.getUserProfile(username)) {
+            is Either.Left -> result
+            is Either.Right -> Either.Right(UserMappers.mapToDomain(result.rightValue))
         }
 }
