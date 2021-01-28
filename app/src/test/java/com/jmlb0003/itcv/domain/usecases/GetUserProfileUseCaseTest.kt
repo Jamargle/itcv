@@ -17,6 +17,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.util.Date
 
 @ExperimentalCoroutinesApi
 class GetUserProfileUseCaseTest {
@@ -71,6 +72,7 @@ class GetUserProfileUseCaseTest {
     private fun getFakeUser() = User(
         username = "",
         name = "",
+        memberSince = Date(),
         email = "",
         location = "",
         repositoryCount = -1
