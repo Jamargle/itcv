@@ -42,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_default"
-
                 android:text="@string/profile_details_repository_website_link_button"
                 android:visibility="invisible"
                 tools:visibility="visible" />
@@ -52,7 +51,6 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_margin="@dimen/margin_default"
                 android:text="@string/profile_details_repository_link_button" />
 
