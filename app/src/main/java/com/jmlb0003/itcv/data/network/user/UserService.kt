@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.data.network.user
 
+import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.NetworkHandler
@@ -10,8 +11,9 @@ import retrofit2.Response
 
 class UserService(
     private val userApiClient: UserApiClient,
+    gson: Gson,
     networkHandler: NetworkHandler
-) : BaseService(networkHandler) {
+) : BaseService(networkHandler, gson) {
 
     fun getUserProfile(username: String): Either<Failure, UserResponse> =
         performCall(userApiClient.getUserProfile(username)).let {
