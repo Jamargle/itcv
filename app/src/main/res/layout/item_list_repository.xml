@@ -32,8 +32,52 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_default"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/repo_watchers_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:drawablePadding="@dimen/margin_small_xx"
+                android:padding="@dimen/margin_small_xx"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:drawableStartCompat="@drawable/ic_eye"
+                tools:text="123" />
+
+            <TextView
+                android:id="@+id/repo_stars_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:drawablePadding="@dimen/margin_small_xx"
+                android:padding="@dimen/margin_small_xx"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:drawableStartCompat="@drawable/ic_star"
+                tools:text="123" />
+
+            <TextView
+                android:id="@+id/repo_forks_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:drawablePadding="@dimen/margin_small_xx"
+                android:padding="@dimen/margin_small_xx"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:drawableStartCompat="@drawable/ic_fork"
+                tools:text="123" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -43,6 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_default"
+                android:contentDescription="Go to website"
                 android:text="@string/profile_details_repository_website_link_button"
                 android:visibility="invisible"
                 app:icon="@drawable/ic_web_link"
@@ -55,6 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_default"
+                android:contentDescription="Go to Github repository"
                 android:text="@string/profile_details_repository_link_button"
                 app:icon="@drawable/ic_github"
                 app:iconGravity="end"

@@ -113,7 +113,8 @@ class ProfileDetailsPresenterTest {
             val expectedRepoDescription = "Repo description"
             val expectedWebUrl = "Repo website"
             val expectedRepoUrl = "Repo url"
-            val expectedRepository = Repo(expectedRepoName, expectedRepoDescription, expectedWebUrl, expectedRepoUrl)
+            val expectedRepository =
+                Repo(expectedRepoName, expectedRepoDescription, expectedWebUrl, expectedRepoUrl, -1, -1, -1)
             val expectedName = "Some name"
             val expectedBio = "Some biography"
             val expectedDate = Date(994560000000)

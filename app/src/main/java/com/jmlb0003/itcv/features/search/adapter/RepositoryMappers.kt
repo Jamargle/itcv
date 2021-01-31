@@ -10,6 +10,9 @@ object RepositoryMappers {
             name = name,
             description = description,
             website = website,
-            repoUrl = repoUrl
+            repoUrl = repoUrl,
+            starsCount = starsCount,
+            watchersCount = watchersCount,
+            forksCount = forksCount
         )
 }

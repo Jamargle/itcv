@@ -24,9 +24,36 @@
     <string name="profile_details_title_profile_details">Profile Details</string>
     <string name="profile_details_location">Location: %s</string>
     <string name="profile_details_followers_count">%s followers</string>
+    <string name="profile_details_repository_name_content_description">Repository %s</string>
     <string name="profile_details_repository_list_title">Repositories</string>
+    <string name="no_watchers">No watchers</string>
+    <string name="one_watcher">One watcher</string>
+    <plurals name="profile_details_repository_watchers_content_description">
+        <item quantity="zero">@string/no_watchers</item>
+        <item quantity="one">@string/one_watcher</item>
+        <item quantity="other">%s watchers</item>
+    </plurals>
+
+    <string name="no_stars">No stars</string>
+    <string name="one_star">One star</string>
+    <plurals name="profile_details_repository_stars_content_description">
+        <item quantity="zero">@string/no_stars</item>
+        <item quantity="one">@string/one_star</item>
+        <item quantity="other">%s stars</item>
+    </plurals>
+
+    <string name="no_forks">No forks</string>
+    <string name="one_fork">One fork</string>
+    <plurals name="profile_details_repository_forks_content_description">
+        <item quantity="zero">@string/no_forks</item>
+        <item quantity="one">@string/one_fork</item>
+        <item quantity="other">%s forks</item>
+    </plurals>
+
     <string name="profile_details_repository_link_button">Go to</string>
+    <string name="profile_details_repository_link_button_content_description">Go to the Github page</string>
     <string name="profile_details_repository_website_link_button">Go to</string>
+    <string name="profile_details_repository_website_link_button_content_description">Go to the website</string>
 
 
     <!--  Settings  -->

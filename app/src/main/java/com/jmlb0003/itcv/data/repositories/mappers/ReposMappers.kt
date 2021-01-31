@@ -11,7 +11,10 @@ object ReposMappers {
                 name = name,
                 description = description ?: "",
                 website = websiteUrl ?: "",
-                repoUrl = repoUrl ?: ""
+                repoUrl = repoUrl ?: "",
+                starsCount = starsCount,
+                watchersCount = watchersCount,
+                forksCount = forksCount
             )
         }
 }
