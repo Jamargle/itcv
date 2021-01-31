@@ -1,9 +1,11 @@
 package com.jmlb0003.itcv.features.profile
 
+import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.mvp.Presenter
 import com.jmlb0003.itcv.domain.model.ProfileDetails
+import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
 import com.jmlb0003.itcv.features.search.adapter.RepositoryMappers.toRepositoryListItem
 import com.jmlb0003.itcv.utils.DateExtensions.toShortDateString
@@ -25,16 +27,48 @@ class ProfileDetailsPresenter(
             it.either(::handleGetDetailsError) { profileDetails -> handleGetDetailsSuccess(profileDetails) }
         }
 
-        viewState.displayProfileName(profileDetailsArguments.userName)
-        viewState.displayMemberSince(profileDetailsArguments.memberSince.toShortDateString())
+        if (profileDetailsArguments.user != null) {
+            displayUserInformation(profileDetailsArguments.user)
+        }
     }
 
     private fun handleGetDetailsSuccess(profileDetails: ProfileDetails) {
-        // TODO if success display rest of details
+        displayUserInformation(profileDetails.user)
         viewState.displayReposInformation(profileDetails.repositories.map { it.toRepositoryListItem() })
     }
 
     private fun handleGetDetailsError(failure: Failure) {
-        // TODO on error display some error messvage
+        viewState.displayErrorMessage(failure.message)
+    }
+
+    private fun displayUserInformation(user: User) {
+        viewState.displayProfileName(user.name)
+        if (user.bio.isNotEmpty()) {
+            viewState.displayBio(user.bio)
+        } else {
+            viewState.hideBio()
+        }
+        viewState.displayMemberSince(user.memberSince.toShortDateString())
+        if (user.email.isNotEmpty()) {
+            viewState.displayEmail(user.email)
+        } else {
+            viewState.hideEmail()
+        }
+        if (user.location.isNotEmpty()) {
+            viewState.displayLocation(user.location)
+        } else {
+            viewState.hideLocation()
+        }
+        viewState.displayFollowerCount(user.followerCount.toString())
+        if (user.website.isNotEmpty()) {
+            viewState.displayWebsite(user.website)
+        } else {
+            viewState.hideWebsite()
+        }
+        if (user.twitterAccount.isNotEmpty()) {
+            viewState.displayTwitterAccount(user.twitterAccount)
+        } else {
+            viewState.hideTwitterAccount()
+        }
     }
 }

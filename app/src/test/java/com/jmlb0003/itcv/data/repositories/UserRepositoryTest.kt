@@ -28,13 +28,14 @@ class UserRepositoryTest {
 
     @Test
     fun `on getUser if service returns right user response it converts it to domain model and returns it`() {
-        val userResponse = getFakeUserResponse()
-        every { userService.getUserProfile(any()) } returns Either.Right(userResponse)
+        val expectedUsername = "some user name"
+        val userResponse = getFakeUserResponse().copy(username = expectedUsername)
+        every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
 
-        val result = repository.getUser("")
+        val result = repository.getUser(expectedUsername)
 
         with((result as Either.Right).rightValue) {
-            assertEquals("zzz", username)
+            assertEquals(expectedUsername, username)
             assertEquals("zzz", name)
             assertEquals("zzz", email)
             assertEquals("zzz", location)
@@ -46,11 +47,13 @@ class UserRepositoryTest {
         UserResponse(
             username = "zzz",
             name = "zzz",
+            bioDescription = "bbb",
             email = "zzz",
             location = "zzz",
             reposCount = -1,
             followerCount = -1,
-            followingCount = -1,
-            profileCreatedDate = Date(0)
+            profileCreatedDate = Date(0),
+            userWebsite = "www",
+            twitterAccount = "ttt"
         )
 }

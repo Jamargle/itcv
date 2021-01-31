@@ -22,6 +22,8 @@
     <string name="profile_details_title_profile_details_with_username">%s Details</string>
     <string name="profile_details_member_since_title">Member since</string>
     <string name="profile_details_title_profile_details">Profile Details</string>
+    <string name="profile_details_location">Location: %s</string>
+    <string name="profile_details_followers_count">%s followers</string>
     <string name="profile_details_repository_list_title">Repositories</string>
     <string name="profile_details_repository_link_button">See repository</string>
     <string name="profile_details_repository_website_link_button">See website</string>

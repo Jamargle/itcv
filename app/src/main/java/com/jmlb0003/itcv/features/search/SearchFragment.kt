@@ -7,12 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jmlb0003.itcv.R
-import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.profile.ProfileDetailsFragment.Companion.getProfileDetailsBundle
 import com.jmlb0003.itcv.features.search.adapter.SearchResult
 import com.jmlb0003.itcv.features.search.adapter.SearchResultsAdapter
 import com.jmlb0003.itcv.utils.FragmentActivity.showSoftKeyboard
-import java.util.Date
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
@@ -51,8 +49,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     view?.findNavController()?.navigate(
                         R.id.navigation_search_to_details,
                         getProfileDetailsBundle(
-                            // TODO pass the correct user given its profile name in search result
-                            User(username = it.profileName, name = "", memberSince = Date())
+                            profileName = it.profileName
                         )
                     )
                 }

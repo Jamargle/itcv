@@ -16,7 +16,6 @@ class UserMappersTest {
         val expectedLocation = "some location"
         val expectedRepositoryCount = 136
         val expectedFollowerCount = 137
-        val expectedFollowingCount = 138
         val expectedDate = Date(4560000000)
         val userResponse = getFakeUserResponse().copy(
             username = expectedUsername,
@@ -25,7 +24,6 @@ class UserMappersTest {
             location = expectedLocation,
             reposCount = expectedRepositoryCount,
             followerCount = expectedFollowerCount,
-            followingCount = expectedFollowingCount,
             profileCreatedDate = expectedDate
         )
 
@@ -38,6 +36,13 @@ class UserMappersTest {
             assertEquals(expectedLocation, location)
             assertEquals(expectedRepositoryCount, repositoryCount)
         }
+    }
+
+    @Test
+    fun `when right user response does not contain bio it converts it to empty string`() {
+        val userResponse = getFakeUserResponse().copy(bioDescription = null)
+        val result = mapToDomain(userResponse)
+        assertEquals("", result.bio)
     }
 
     @Test
@@ -54,15 +59,31 @@ class UserMappersTest {
         assertEquals("", result.location)
     }
 
+    @Test
+    fun `when right user response does not contain website it converts it to empty string`() {
+        val userResponse = getFakeUserResponse().copy(userWebsite = null)
+        val result = mapToDomain(userResponse)
+        assertEquals("", result.website)
+    }
+
+    @Test
+    fun `when right user response does not contain twitter account it converts it to empty string`() {
+        val userResponse = getFakeUserResponse().copy(twitterAccount = null)
+        val result = mapToDomain(userResponse)
+        assertEquals("", result.twitterAccount)
+    }
+
     private fun getFakeUserResponse() =
         UserResponse(
             username = "zzz",
             name = "zzz",
+            bioDescription = "bbb",
             email = "zzz",
             location = "zzz",
             reposCount = -1,
             followerCount = -1,
-            followingCount = -1,
-            profileCreatedDate = Date(0)
+            profileCreatedDate = Date(0),
+            userWebsite = "www",
+            twitterAccount = "ttt"
         )
 }

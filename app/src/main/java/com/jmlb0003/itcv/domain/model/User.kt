@@ -8,8 +8,12 @@ import java.util.Date
 data class User(
     val username: String,
     val name: String,
+    val bio: String = "",
     val memberSince: Date,
     val email: String = "",
     val location: String = "",
-    val repositoryCount: Int = 0
+    val repositoryCount: Int = 0,
+    val followerCount: Int = 0,
+    val website: String = "",
+    val twitterAccount: String = ""
 ) : Parcelable

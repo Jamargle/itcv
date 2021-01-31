@@ -15,6 +15,7 @@ import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.MainToolbarController
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
 import com.jmlb0003.itcv.features.profile.adapter.ReposAdapter
+import com.jmlb0003.itcv.utils.showErrorPopup
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 
 class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
@@ -23,6 +24,13 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     private val onUserNameChange = Observer<ProfileDetailsStateList> { handleUserNameChange(it) }
     private val onMemberSinceChange = Observer<ProfileDetailsStateList> { handleMemberSinceChange(it) }
     private val onRepositoriesChange = Observer<List<RepoListItem>> { handleReposChange(it) }
+    private val onUserBioChange = Observer<ProfileDetailsStateList> { handleUserBioChange(it) }
+    private val onEmailChange = Observer<ProfileDetailsStateList> { handleEmailChange(it) }
+    private val onLocationChange = Observer<ProfileDetailsStateList> { handleLocationChange(it) }
+    private val onFollowerCountChange = Observer<ProfileDetailsStateList> { handleFollowerCountChange(it) }
+    private val onUserWebsiteChange = Observer<ProfileDetailsStateList> { handleWebsiteChange(it) }
+    private val onTwitterAccountChange = Observer<ProfileDetailsStateList> { handleTwitterAccountChange(it) }
+    private val onErrorTrigger = Observer<ProfileDetailsStateList> { displayError(it) }
     // endregion
 
     private val viewModel by viewModels<ProfileDetailsViewModel> { getProfileDetailsViewModelFactory() }
@@ -62,9 +70,16 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun initViewStateObservers() {
         with(viewModel.nonNullViewState) {
-            profileNameState.observe(viewLifecycleOwner, onUserNameChange)
-            memberSinceState.observe(viewLifecycleOwner, onMemberSinceChange)
             profileRepositories.observe(viewLifecycleOwner, onRepositoriesChange)
+            profileNameState.observe(viewLifecycleOwner, onUserNameChange)
+            profileBioState.observe(viewLifecycleOwner, onUserBioChange)
+            memberSinceState.observe(viewLifecycleOwner, onMemberSinceChange)
+            emailState.observe(viewLifecycleOwner, onEmailChange)
+            locationState.observe(viewLifecycleOwner, onLocationChange)
+            followerCountState.observe(viewLifecycleOwner, onFollowerCountChange)
+            userWebsiteState.observe(viewLifecycleOwner, onUserWebsiteChange)
+            twitterAccountState.observe(viewLifecycleOwner, onTwitterAccountChange)
+            errorState.observe(viewLifecycleOwner, onErrorTrigger)
         }
     }
 
@@ -79,15 +94,58 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         member_since?.updateLabelViewState(state)
     }
 
-    private fun TextView.updateLabelViewState(state: ProfileDetailsStateList) {
+    private fun handleUserBioChange(state: ProfileDetailsStateList) {
+        user_bio?.updateLabelViewState(state)
+    }
+
+    private fun handleEmailChange(state: ProfileDetailsStateList) {
+        user_email?.updateLabelViewState(state)
+    }
+
+    private fun handleLocationChange(state: ProfileDetailsStateList) {
+        user_location?.updateLabelViewState(state) { R.string.profile_details_location }
+    }
+
+    private fun handleFollowerCountChange(state: ProfileDetailsStateList) {
+        followers_count?.updateLabelViewState(state) { R.string.profile_details_followers_count }
+    }
+
+    private fun handleWebsiteChange(state: ProfileDetailsStateList) {
+        user_web?.updateLabelViewState(state)
+    }
+
+    private fun handleTwitterAccountChange(state: ProfileDetailsStateList) {
+        twitter_username?.updateLabelViewState(state)
+    }
+
+    private fun TextView.updateLabelViewState(
+        state: ProfileDetailsStateList,
+        onLabelReady: (() -> Int)? = null
+    ) {
         when (state) {
             is ProfileDetailsStateList.Ready -> {
                 visibility = View.VISIBLE
-                text = state.value
+                text = onLabelReady?.invoke()?.let { getString(it, state.value) } ?: state.value
             }
-            ProfileDetailsStateList.Hidden -> visibility = View.GONE
+            else -> visibility = View.GONE
         }
     }
+
+    private fun displayError(state: ProfileDetailsStateList?) {
+        when (state) {
+            is ProfileDetailsStateList.Error -> activity?.showErrorPopup(errorMessage = getErrorMessage(state.errorMessage))
+            else -> {
+                // NO-OP
+            }
+        }
+    }
+
+    private fun getErrorMessage(errorMessage: String?) =
+        if (errorMessage.isNullOrBlank()) {
+            getString(R.string.error_dialog_generic_message)
+        } else {
+            errorMessage
+        }
 
     private fun handleReposChange(repositories: List<RepoListItem>) {
         reposAdapter?.setRepositories(repositories)
@@ -97,10 +155,11 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         private const val ARG_PROFILE_DETAILS = "Args:ProfileDetailsArgs"
 
         fun getProfileDetailsBundle(baseProfile: User) = bundleOf(
-            ARG_PROFILE_DETAILS to ProfileDetailsArgs(
-                userName = baseProfile.username,
-                memberSince = baseProfile.memberSince
-            )
+            ARG_PROFILE_DETAILS to ProfileDetailsArgs(user = baseProfile)
+        )
+
+        fun getProfileDetailsBundle(profileName: String) = bundleOf(
+            ARG_PROFILE_DETAILS to ProfileDetailsArgs(userName = profileName)
         )
     }
 }

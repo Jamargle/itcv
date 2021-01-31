@@ -10,10 +10,14 @@ object UserMappers {
             User(
                 username = username,
                 name = name,
+                bio = bioDescription ?: "",
                 memberSince = profileCreatedDate,
-                repositoryCount = reposCount,
                 email = email ?: "",
-                location = location ?: ""
+                location = location ?: "",
+                repositoryCount = reposCount,
+                followerCount = followerCount,
+                website = userWebsite ?: "",
+                twitterAccount = twitterAccount ?: "",
             )
         }
 }
