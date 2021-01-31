@@ -1,7 +1,6 @@
 package com.jmlb0003.itcv.utils
 
 import com.google.gson.GsonBuilder
-import com.jmlb0003.itcv.BuildConfig
 import com.jmlb0003.itcv.utils.DateExtensions.BACKEND_DATE_FORMAT
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -11,7 +10,7 @@ object ApiServiceGenerator {
 
     private const val BASE_URL = "https://api.github.com"
 
-    private val gson by lazy {
+    val gson by lazy {
         GsonBuilder()
             .setDateFormat(BACKEND_DATE_FORMAT)
             .create()

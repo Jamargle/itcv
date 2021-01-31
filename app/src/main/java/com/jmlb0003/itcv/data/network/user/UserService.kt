@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.data.network.user
 
+import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.NetworkHandler
@@ -10,8 +11,9 @@ import retrofit2.Response
 
 class UserService(
     private val userApiClient: UserApiClient,
+    gson: Gson,
     networkHandler: NetworkHandler
-) : BaseService(networkHandler) {
+) : BaseService(networkHandler, gson) {
 
     fun getUserProfile(username: String): Either<Failure, UserResponse> =
         performCall(userApiClient.getUserProfile(username)).let {
@@ -24,13 +26,7 @@ class UserService(
 
     private fun handleUserProfileResponse(response: Response<UserResponse>) =
         try {
-            with(response) {
-                if (isSuccessful) {
-                    Either.Right(requireNotNull(body()))
-                } else {
-                    Either.Left(Failure.ServerError(IllegalStateException("Error while fetching user's profile")))
-                }
-            }
+            Either.Right(requireNotNull(response.body()))
         } catch (exception: JsonParseException) {
             Either.Left(Failure.NetworkRequestError(IllegalStateException("There was an error parsing response to fetch user's profile")))
         }

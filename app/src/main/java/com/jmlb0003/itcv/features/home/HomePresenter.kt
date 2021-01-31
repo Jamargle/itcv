@@ -9,6 +9,7 @@ import com.jmlb0003.itcv.domain.usecases.GetUserProfileUseCase
 
 class HomePresenter(
     private val viewState: HomeViewState,
+    private val navigationTriggers: NavigationTriggers,
     getUserProfileUseCase: GetUserProfileUseCase,
     dispatchers: Dispatchers
 ) : Presenter(dispatchers) {
@@ -23,7 +24,14 @@ class HomePresenter(
         }
     }
 
+    private var currentUser: User? = null
+
+    fun onSeeAllClicked() {
+        currentUser?.let { navigationTriggers.navigateToProfileDetails(it) }
+    }
+
     private fun handleGetProfileSuccess(user: User) {
+        currentUser = user
         viewState.displayUserInfo(user)
     }
 

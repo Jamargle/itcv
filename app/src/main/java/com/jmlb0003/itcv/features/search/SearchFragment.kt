@@ -48,7 +48,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     // TODO Pass the clicked result to open the details screen
                     view?.findNavController()?.navigate(
                         R.id.navigation_search_to_details,
-                        getProfileDetailsBundle(it.profileName)
+                        getProfileDetailsBundle(
+                            profileName = it.profileName
+                        )
                     )
                 }
             ).also { adapter = it }

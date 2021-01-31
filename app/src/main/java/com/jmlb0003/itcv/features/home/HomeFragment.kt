@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.domain.model.User
@@ -30,6 +31,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             it.setOnClickListener {
                 findNavController().navigate(R.id.navigation_home_to_search_by_fab)
             }
+        }
+        rootView.findViewById<MaterialButton>(R.id.see_all_details_button)?.let {
+            it.setOnClickListener { viewModel.presenter.onSeeAllClicked() }
         }
     }
 

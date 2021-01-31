@@ -1,6 +1,6 @@
 package com.jmlb0003.itcv.core.exception
 
-sealed class Failure(val error: Throwable? = null) : Throwable() {
+sealed class Failure(val error: Throwable? = null) : Throwable(error?.message) {
 
     object NetworkConnection : Failure()
     class ServerError(error: Throwable) : Failure(error)

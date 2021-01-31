@@ -65,13 +65,25 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_default"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/github_avatar_horizontal_barrier"
+        app:layout_constraintBottom_toTopOf="@id/see_all_details_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/github_avatar_vertical_barrier"
         app:layout_constraintTop_toBottomOf="@id/user_location"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="This is the bio of the user that might be a bit long..."
         tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/see_all_details_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_default"
+        android:text="@string/home_profile_all_details_button"
+        app:layout_constraintBottom_toTopOf="@id/github_avatar_horizontal_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/github_avatar_vertical_barrier"
+        app:layout_constraintTop_toBottomOf="@id/user_bio" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/github_avatar_horizontal_barrier"
