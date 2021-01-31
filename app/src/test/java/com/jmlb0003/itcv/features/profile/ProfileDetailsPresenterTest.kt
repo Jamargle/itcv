@@ -60,6 +60,42 @@ class ProfileDetailsPresenterTest {
     }
 
     @Test
+    fun `on onRepoGithubUrlClicked triggers opening the given website`() {
+        presenter.onRepoGithubUrlClicked("abc")
+        verify { navigationTriggers.openUrl("abc") }
+    }
+
+    @Test
+    fun `on onRepoGithubUrlClicked does nothing if the given website is empty or blank`() {
+        presenter.onRepoGithubUrlClicked(" ")
+        verify { navigationTriggers wasNot called }
+    }
+
+    @Test
+    fun `on onRepoGithubUrlClicked does nothing if the given website is null`() {
+        presenter.onRepoGithubUrlClicked(null)
+        verify { navigationTriggers wasNot called }
+    }
+
+    @Test
+    fun `on onRepoWebsiteClicked triggers opening the given website`() {
+        presenter.onRepoWebsiteClicked("abc")
+        verify { navigationTriggers.openUrl("abc") }
+    }
+
+    @Test
+    fun `on onRepoWebsiteClicked does nothing if the given website is empty or blank`() {
+        presenter.onRepoWebsiteClicked(" ")
+        verify { navigationTriggers wasNot called }
+    }
+
+    @Test
+    fun `on onRepoWebsiteClicked does nothing if the given website is null`() {
+        presenter.onRepoWebsiteClicked(null)
+        verify { navigationTriggers wasNot called }
+    }
+
+    @Test
     fun `on onViewReady displays loading view while getting repositories`() {
         val args = ProfileDetailsArgs(user = null, userName = "")
         presenter.onViewReady(args)

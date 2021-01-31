@@ -14,6 +14,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.core.livedata.ConsumingObserver
+import com.jmlb0003.itcv.core.tryToOpenUrl
+import com.jmlb0003.itcv.domain.model.User
+import com.jmlb0003.itcv.features.home.NavigationTriggers
+import com.jmlb0003.itcv.features.profile.ProfileDetailsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,11 +26,16 @@ class MainActivity : AppCompatActivity() {
 
     private val toolbarController by viewModels<MainToolbarController>()
 
+    private val onNavigateToProfileDetailsRequest = ConsumingObserver<User> { goToProfileDetails(it) }
+    private val onOpenUrlRequest = ConsumingObserver<String> { openUrl(it) }
+    private val navigationTriggers by viewModels<NavigationTriggers>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initToolbar()
         setupNavigation()
+        initNavigationTriggerObservers()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -63,5 +73,23 @@ class MainActivity : AppCompatActivity() {
             NavigationUI.setupActionBarWithNavController(this, navigationController, appBarConfiguration)
             NavigationUI.setupWithNavController(bottomNavigationView, navigationController)
         }
+    }
+
+    private fun initNavigationTriggerObservers() {
+        navigationTriggers.run {
+            getOpenUrlTrigger().observe(this@MainActivity, onOpenUrlRequest)
+            getGoToProfileDetailsTrigger().observe(this@MainActivity, onNavigateToProfileDetailsRequest)
+        }
+    }
+
+    private fun goToProfileDetails(user: User) {
+        findNavController(R.id.nav_host_fragment).navigate(
+            R.id.navigation_profile_to_details,
+            ProfileDetailsFragment.getProfileDetailsBundle(user)
+        )
+    }
+
+    private fun openUrl(url: String) {
+        tryToOpenUrl(url)
     }
 }

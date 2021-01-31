@@ -23,6 +23,18 @@ class ProfileDetailsPresenter(
         }
     }
 
+    fun onRepoGithubUrlClicked(repoUrl: String?) {
+        if (!repoUrl.isNullOrBlank()) {
+            navigationTriggers.openUrl(repoUrl)
+        }
+    }
+
+    fun onRepoWebsiteClicked(website: String?) {
+        if (!website.isNullOrBlank()) {
+            navigationTriggers.openUrl(website)
+        }
+    }
+
     fun onViewReady(profileDetailsArguments: ProfileDetailsArgs) {
         viewState.displayLoadingRepos()
         getProfileDetailsUseCase(

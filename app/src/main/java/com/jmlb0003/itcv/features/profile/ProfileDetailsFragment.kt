@@ -3,7 +3,6 @@ package com.jmlb0003.itcv.features.profile
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -69,15 +68,10 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     private fun initRepositoryListView(rootView: View) {
         rootView.findViewById<RecyclerView>(R.id.repository_list)?.let { recyclerView ->
             recyclerView.adapter = ReposAdapter(
-                onWebSiteButtonClicked = { openUrl(it) },
-                onRepoUrlButtonClicked = { openUrl(it) }
+                onWebSiteButtonClicked = { viewModel.presenter.onRepoWebsiteClicked(it) },
+                onRepoUrlButtonClicked = { viewModel.presenter.onRepoGithubUrlClicked(it) }
             ).also { reposAdapter = it }
         }
-    }
-
-    private fun openUrl(it: String) {
-        // TODO open url
-        Toast.makeText(requireContext(), "TODO: Open url: $it", Toast.LENGTH_SHORT).show()
     }
 
     private fun initViewStateObservers() {
