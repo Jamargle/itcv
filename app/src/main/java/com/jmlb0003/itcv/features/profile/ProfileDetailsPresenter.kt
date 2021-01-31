@@ -16,6 +16,7 @@ class ProfileDetailsPresenter(
 ) : Presenter(dispatchers) {
 
     fun onViewReady(profileDetailsArguments: ProfileDetailsArgs) {
+        viewState.displayLoadingRepos()
         getProfileDetailsUseCase(
             coroutineScope = this,
             dispatchers = dispatchers,
@@ -37,6 +38,7 @@ class ProfileDetailsPresenter(
     }
 
     private fun handleGetDetailsError(failure: Failure) {
+        viewState.hideRepos()
         viewState.displayErrorMessage(failure.message)
     }
 

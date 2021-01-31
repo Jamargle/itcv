@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.MainToolbarController
-import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
 import com.jmlb0003.itcv.features.profile.adapter.ReposAdapter
 import com.jmlb0003.itcv.utils.showErrorPopup
 import kotlinx.android.synthetic.main.fragment_profile_details.*
@@ -23,7 +22,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     // region view state observers
     private val onUserNameChange = Observer<ProfileDetailsStateList> { handleUserNameChange(it) }
     private val onMemberSinceChange = Observer<ProfileDetailsStateList> { handleMemberSinceChange(it) }
-    private val onRepositoriesChange = Observer<List<RepoListItem>> { handleReposChange(it) }
+    private val onRepositoriesChange = Observer<RepositoriesStateList> { handleReposChange(it) }
     private val onUserBioChange = Observer<ProfileDetailsStateList> { handleUserBioChange(it) }
     private val onEmailChange = Observer<ProfileDetailsStateList> { handleEmailChange(it) }
     private val onLocationChange = Observer<ProfileDetailsStateList> { handleLocationChange(it) }
@@ -147,8 +146,27 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
             errorMessage
         }
 
-    private fun handleReposChange(repositories: List<RepoListItem>) {
-        reposAdapter?.setRepositories(repositories)
+    private fun handleReposChange(state: RepositoriesStateList) {
+        when (state) {
+            RepositoriesStateList.Loading -> displayRepositoriesLoading()
+            is RepositoriesStateList.Ready -> reposAdapter?.setRepositories(state.repositories)
+            RepositoriesStateList.Hidden -> hideRepositoriesView()
+        }
+        if (state != RepositoriesStateList.Loading) {
+            hideRepositoriesLoadingView()
+        }
+    }
+
+    private fun displayRepositoriesLoading() {
+        loading_repository_list_view?.visibility = View.VISIBLE
+    }
+
+    private fun hideRepositoriesLoadingView() {
+        loading_repository_list_view?.visibility = View.GONE
+    }
+
+    private fun hideRepositoriesView() {
+        repository_list?.visibility = View.GONE
     }
 
     companion object {

@@ -38,6 +38,13 @@ class ProfileDetailsPresenterTest {
     private val presenter = ProfileDetailsPresenter(viewState, getProfileDetailsUseCase, dispatchers)
 
     @Test
+    fun `on onViewReady displays loading view while getting repositories`() {
+        val args = ProfileDetailsArgs(user = null, userName = "")
+        presenter.onViewReady(args)
+        verify { viewState.displayLoadingRepos() }
+    }
+
+    @Test
     fun `on onViewReady displays repositories information if the useCase fetches them successfully`() =
         testDispatcher.runBlockingTest {
             val userName = "Some username"
@@ -147,12 +154,10 @@ class ProfileDetailsPresenterTest {
         }
 
     @Test
-    fun `on onViewReady does nothing for now if the useCase gets an error from repos repository`() =
+    fun `on onViewReady displays error if the useCase gets an error from repos repository`() =
         testDispatcher.runBlockingTest {
             val userName = "Some username"
-            val args = ProfileDetailsArgs(
-                userName = userName
-            )
+            val args = ProfileDetailsArgs(userName = userName)
             every { userRepository.getUser(userName) } returns Either.Right(mockk())
             every { reposRepository.getUserRepositories(userName) } returns Either.Left(Failure.NetworkConnection)
 
@@ -163,12 +168,23 @@ class ProfileDetailsPresenterTest {
         }
 
     @Test
-    fun `on onViewReady does nothing for now if the useCase gets an error from userRepository`() =
+    fun `on onViewReady hides loading view for repositories if the useCase gets an error from repos repository`() =
         testDispatcher.runBlockingTest {
             val userName = "Some username"
-            val args = ProfileDetailsArgs(
-                userName = userName
-            )
+            val args = ProfileDetailsArgs(userName = userName)
+            every { userRepository.getUser(userName) } returns Either.Right(mockk())
+            every { reposRepository.getUserRepositories(userName) } returns Either.Left(Failure.NetworkConnection)
+
+            presenter.onViewReady(args)
+
+            verify { viewState.hideRepos() }
+        }
+
+    @Test
+    fun `on onViewReady displays error if the useCase gets an error from userRepository`() =
+        testDispatcher.runBlockingTest {
+            val userName = "Some username"
+            val args = ProfileDetailsArgs(userName = userName)
             every { userRepository.getUser(userName) } returns Either.Left(Failure.NetworkConnection)
             every { reposRepository.getUserRepositories(userName) } returns Either.Right(emptyList())
 
@@ -176,6 +192,19 @@ class ProfileDetailsPresenterTest {
 
             verify(exactly = 0) { viewState.displayReposInformation(any()) }
             verify { viewState.displayErrorMessage(null) }
+        }
+
+    @Test
+    fun `on onViewReady hides loading view for repositories if the useCase gets an error from userRepository`() =
+        testDispatcher.runBlockingTest {
+            val userName = "Some username"
+            val args = ProfileDetailsArgs(userName = userName)
+            every { userRepository.getUser(userName) } returns Either.Left(Failure.NetworkConnection)
+            every { reposRepository.getUserRepositories(userName) } returns Either.Right(emptyList())
+
+            presenter.onViewReady(args)
+
+            verify { viewState.hideRepos() }
         }
 
     @Before

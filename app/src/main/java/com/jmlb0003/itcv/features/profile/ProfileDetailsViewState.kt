@@ -5,7 +5,7 @@ import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
 
 class ProfileDetailsViewState {
 
-    val profileRepositories: MutableLiveData<List<RepoListItem>> = MutableLiveData()
+    val profileRepositories: MutableLiveData<RepositoriesStateList> = MutableLiveData()
     val profileNameState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val profileBioState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val memberSinceState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
@@ -21,7 +21,11 @@ class ProfileDetailsViewState {
 
     fun displayProfileName(profileName: String) = profileNameState.postValue(ProfileDetailsStateList.Ready(profileName))
     fun displayMemberSince(memberSince: String) = memberSinceState.postValue(ProfileDetailsStateList.Ready(memberSince))
-    fun displayReposInformation(repositories: List<RepoListItem>) = profileRepositories.postValue(repositories)
+    fun displayLoadingRepos() = profileRepositories.postValue(RepositoriesStateList.Loading)
+    fun hideRepos() = profileRepositories.postValue(RepositoriesStateList.Hidden)
+    fun displayReposInformation(repositories: List<RepoListItem>) =
+        profileRepositories.postValue(RepositoriesStateList.Ready(repositories))
+
     fun displayBio(bio: String) = profileBioState.postValue(ProfileDetailsStateList.Ready(bio))
     fun hideBio() = profileBioState.postValue(ProfileDetailsStateList.Hidden)
     fun displayEmail(email: String) = emailState.postValue(ProfileDetailsStateList.Ready(email))
