@@ -14,17 +14,20 @@ class RepositoriesProvider(private val mainInjector: MainInjector) {
     val repositoriesRepository by lazy { ReposRepository(repoService) }
 
     private val networkHandler get() = mainInjector.networkHandler
+    private val gson by lazy { ApiServiceGenerator.gson }
 
     // region Services instantiation
     private val userService by lazy {
         UserService(
             userApiClient,
+            gson,
             networkHandler
         )
     }
     private val repoService by lazy {
         RepoService(
             repoApiClient,
+            gson,
             networkHandler
         )
     }

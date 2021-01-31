@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.data.network.repo
 
+import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.NetworkHandler
@@ -18,9 +19,10 @@ import retrofit2.Response
 class RepoServiceTest {
 
     private val networkHandler = mockk<NetworkHandler>()
+    private val gson = mockk<Gson>()
     private val apiClient = mockk<RepositoryApiClient>()
 
-    private val service = RepoService(apiClient, networkHandler)
+    private val service = RepoService(apiClient, gson, networkHandler)
 
     @Test
     fun `on getRepositories with failure from backend returns the failure`() {
@@ -35,21 +37,6 @@ class RepoServiceTest {
 
         val result = service.getRepositories(username)
         assertTrue((result as Either.Left).leftValue is Failure.NetworkRequestError)
-    }
-
-    @Test
-    fun `on getRepositories with non success from backend returns ServerError`() {
-        networkHandler.mockNetworkConnected()
-        val call = mockk<Call<List<RepoResponse>>>()
-        val username = "username"
-        every { apiClient.getRepositoriesForUser(username) } returns call
-        val response = mockk<Response<List<RepoResponse>>>()
-        every { call.execute() } returns response
-        every { response.isSuccessful } returns false
-
-        val result = service.getRepositories(username)
-        assertTrue((result as Either.Left).leftValue is Failure.ServerError)
-        assertEquals("Error while fetching user's repositories", result.leftValue.error?.message)
     }
 
     @Test

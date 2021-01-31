@@ -1,9 +1,9 @@
 package com.jmlb0003.itcv.core.interactor
 
+import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.coroutines.DispatchersImp
 import com.jmlb0003.itcv.core.exception.Failure
-import com.jmlb0003.itcv.core.Either
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

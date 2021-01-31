@@ -1,6 +1,5 @@
 package com.jmlb0003.itcv.features.profile
 
-import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.mvp.Presenter

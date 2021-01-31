@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.data.network.user
 
+import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.NetworkHandler
@@ -19,8 +20,9 @@ class UserServiceTest {
 
     private val networkHandler = mockk<NetworkHandler>()
     private val apiClient = mockk<UserApiClient>()
+    private val gson = mockk<Gson>()
 
-    private val service = UserService(apiClient, networkHandler)
+    private val service = UserService(apiClient, gson, networkHandler)
 
     @Test
     fun `on getUserProfile with failure from backend returns the failure`() {
@@ -35,21 +37,6 @@ class UserServiceTest {
 
         val result = service.getUserProfile(username)
         assertTrue((result as Either.Left).leftValue is Failure.NetworkRequestError)
-    }
-
-    @Test
-    fun `on getUserProfile with non success from backend returns ServerError`() {
-        networkHandler.mockNetworkConnected()
-        val call = mockk<Call<UserResponse>>()
-        val username = "username"
-        every { apiClient.getUserProfile(username) } returns call
-        val response = mockk<Response<UserResponse>>()
-        every { call.execute() } returns response
-        every { response.isSuccessful } returns false
-
-        val result = service.getUserProfile(username)
-        assertTrue((result as Either.Left).leftValue is Failure.ServerError)
-        assertEquals("Error while fetching user's profile", result.leftValue.error?.message)
     }
 
     @Test

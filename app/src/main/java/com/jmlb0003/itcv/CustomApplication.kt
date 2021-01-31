@@ -1,11 +1,11 @@
 package com.jmlb0003.itcv
 
 import android.app.Application
-import com.jmlb0003.itcv.di.RepositoriesProvider
 import com.jmlb0003.itcv.core.NetworkHandler
 import com.jmlb0003.itcv.core.SharedPreferencesHandler
 import com.jmlb0003.itcv.core.coroutines.DispatchersImp
 import com.jmlb0003.itcv.di.MainInjector
+import com.jmlb0003.itcv.di.RepositoriesProvider
 
 class CustomApplication : Application() {
 

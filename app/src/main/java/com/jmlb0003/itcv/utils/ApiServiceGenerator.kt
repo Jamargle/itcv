@@ -10,7 +10,7 @@ object ApiServiceGenerator {
 
     private const val BASE_URL = "https://api.github.com"
 
-    private val gson by lazy {
+    val gson by lazy {
         GsonBuilder()
             .setDateFormat(BACKEND_DATE_FORMAT)
             .create()
