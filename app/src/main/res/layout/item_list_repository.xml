@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/repository_list_item"
     android:layout_width="match_parent"
@@ -44,6 +45,8 @@
                 android:layout_margin="@dimen/margin_default"
                 android:text="@string/profile_details_repository_website_link_button"
                 android:visibility="invisible"
+                app:icon="@drawable/ic_web_link"
+                app:iconGravity="end"
                 tools:visibility="visible" />
 
             <com.google.android.material.button.MaterialButton
@@ -52,7 +55,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_default"
-                android:text="@string/profile_details_repository_link_button" />
+                android:text="@string/profile_details_repository_link_button"
+                app:icon="@drawable/ic_github"
+                app:iconGravity="end"
+                app:iconSize="24dp" />
 
         </LinearLayout>
 

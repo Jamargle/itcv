@@ -25,8 +25,8 @@
     <string name="profile_details_location">Location: %s</string>
     <string name="profile_details_followers_count">%s followers</string>
     <string name="profile_details_repository_list_title">Repositories</string>
-    <string name="profile_details_repository_link_button">See repository</string>
-    <string name="profile_details_repository_website_link_button">See website</string>
+    <string name="profile_details_repository_link_button">Go to</string>
+    <string name="profile_details_repository_website_link_button">Go to</string>
 
 
     <!--  Settings  -->
