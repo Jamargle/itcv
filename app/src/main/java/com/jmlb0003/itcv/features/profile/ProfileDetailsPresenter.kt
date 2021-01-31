@@ -6,14 +6,22 @@ import com.jmlb0003.itcv.core.mvp.Presenter
 import com.jmlb0003.itcv.domain.model.ProfileDetails
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
+import com.jmlb0003.itcv.features.home.NavigationTriggers
 import com.jmlb0003.itcv.features.search.adapter.RepositoryMappers.toRepositoryListItem
 import com.jmlb0003.itcv.utils.DateExtensions.toShortDateString
 
 class ProfileDetailsPresenter(
     private val viewState: ProfileDetailsViewState,
+    private val navigationTriggers: NavigationTriggers,
     private val getProfileDetailsUseCase: GetProfileDetailsUseCase,
     private val dispatchers: Dispatchers
 ) : Presenter(dispatchers) {
+
+    fun onUserWebsiteClicked(website: String?) {
+        if (!website.isNullOrBlank()) {
+            navigationTriggers.openUrl(website)
+        }
+    }
 
     fun onViewReady(profileDetailsArguments: ProfileDetailsArgs) {
         viewState.displayLoadingRepos()

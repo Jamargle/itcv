@@ -38,6 +38,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        initViewListeners(view)
         initRepositoryListView(view)
         initViewStateObservers()
 
@@ -52,6 +53,18 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
             )
         )
     }
+
+    private fun initViewListeners(rootView: View) {
+        rootView.findViewById<View>(R.id.user_web)?.setOnClickListener {
+            viewModel.presenter.onUserWebsiteClicked(getUserWebsite())
+        }
+    }
+
+    private fun getUserWebsite() =
+        when (val website = viewModel.nonNullViewState.userWebsiteState.value) {
+            is ProfileDetailsStateList.Ready -> website.value
+            else -> null
+        }
 
     private fun initRepositoryListView(rootView: View) {
         rootView.findViewById<RecyclerView>(R.id.repository_list)?.let { recyclerView ->

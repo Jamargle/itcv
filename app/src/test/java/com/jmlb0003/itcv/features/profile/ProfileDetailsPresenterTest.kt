@@ -8,7 +8,9 @@ import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.Repo
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
+import com.jmlb0003.itcv.features.home.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
+import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -32,10 +34,30 @@ class ProfileDetailsPresenterTest {
     private val dispatchers = TestDispatchers(testDispatcher)
 
     private val viewState = mockk<ProfileDetailsViewState>(relaxed = true)
+    private val navigationTriggers = mockk<NavigationTriggers>(relaxed = true)
     private val userRepository = mockk<UserRepository>(relaxed = true)
     private val reposRepository = mockk<ReposRepository>(relaxed = true)
     private val getProfileDetailsUseCase = GetProfileDetailsUseCase(userRepository, reposRepository)
-    private val presenter = ProfileDetailsPresenter(viewState, getProfileDetailsUseCase, dispatchers)
+    private val presenter =
+        ProfileDetailsPresenter(viewState, navigationTriggers, getProfileDetailsUseCase, dispatchers)
+
+    @Test
+    fun `on onUserWebsiteClicked triggers opening the given website`() {
+        presenter.onUserWebsiteClicked("abc")
+        verify { navigationTriggers.openUrl("abc") }
+    }
+
+    @Test
+    fun `on onUserWebsiteClicked does nothing if the given website is empty or blank`() {
+        presenter.onUserWebsiteClicked(" ")
+        verify { navigationTriggers wasNot called }
+    }
+
+    @Test
+    fun `on onUserWebsiteClicked does nothing if the given website is null`() {
+        presenter.onUserWebsiteClicked(null)
+        verify { navigationTriggers wasNot called }
+    }
 
     @Test
     fun `on onViewReady displays loading view while getting repositories`() {
