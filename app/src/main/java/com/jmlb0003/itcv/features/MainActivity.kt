@@ -27,6 +27,9 @@ class MainActivity : AppCompatActivity() {
     private val toolbarController by viewModels<MainToolbarController>()
 
     private val onNavigateToProfileDetailsRequest = ConsumingObserver<User> { goToProfileDetails(it) }
+    private val onNavigateToProfileDetailsByUsernameRequest = ConsumingObserver<String> {
+        goToProfileDetailsByUsername(it)
+    }
     private val onOpenUrlRequest = ConsumingObserver<String> { openUrl(it) }
     private val navigationTriggers by viewModels<NavigationTriggers>()
 
@@ -79,6 +82,8 @@ class MainActivity : AppCompatActivity() {
         navigationTriggers.run {
             getOpenUrlTrigger().observe(this@MainActivity, onOpenUrlRequest)
             getGoToProfileDetailsTrigger().observe(this@MainActivity, onNavigateToProfileDetailsRequest)
+            getGoToProfileDetailsByUsernameTrigger()
+                .observe(this@MainActivity, onNavigateToProfileDetailsByUsernameRequest)
         }
     }
 
@@ -86,6 +91,15 @@ class MainActivity : AppCompatActivity() {
         findNavController(R.id.nav_host_fragment).navigate(
             R.id.navigation_profile_to_details,
             ProfileDetailsFragment.getProfileDetailsBundle(user)
+        )
+    }
+
+    private fun goToProfileDetailsByUsername(username: String) {
+        findNavController(R.id.nav_host_fragment).navigate(
+            R.id.navigation_search_to_details,
+            ProfileDetailsFragment.getProfileDetailsBundle(
+                profileName = username
+            )
         )
     }
 

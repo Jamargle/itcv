@@ -18,11 +18,6 @@ class SearchResultsAdapter(
     )
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        with(holder) {
-            getItem(position)?.let { searchResult ->
-                bindView(searchResult)
-                itemView.setOnClickListener { onResultClicked(searchResult) }
-            }
-        }
+        holder.bindView(getItem(position), onResultClicked)
     }
 }
