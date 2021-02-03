@@ -6,6 +6,7 @@ import com.jmlb0003.itcv.data.network.user.UserApiClient
 import com.jmlb0003.itcv.data.network.user.UserService
 import com.jmlb0003.itcv.data.repositories.ReposRepository
 import com.jmlb0003.itcv.data.repositories.UserRepository
+import com.jmlb0003.itcv.data.repositories.mappers.ReposMappers
 import com.jmlb0003.itcv.data.repositories.mappers.SearchResultsMappers
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers
 import com.jmlb0003.itcv.utils.ApiServiceGenerator
@@ -13,7 +14,7 @@ import com.jmlb0003.itcv.utils.ApiServiceGenerator
 class RepositoriesProvider(private val mainInjector: MainInjector) {
 
     val userRepository by lazy { UserRepository(userService, UserMappers, SearchResultsMappers) }
-    val repositoriesRepository by lazy { ReposRepository(repoService) }
+    val repositoriesRepository by lazy { ReposRepository(repoService, ReposMappers) }
 
     private val networkHandler get() = mainInjector.networkHandler
     private val gson by lazy { ApiServiceGenerator.gson }
