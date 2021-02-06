@@ -9,7 +9,7 @@ object UserMappers {
         with(userResponse) {
             User(
                 username = username,
-                name = name,
+                name = name ?: username,
                 bio = bioDescription ?: "",
                 memberSince = profileCreatedDate,
                 email = email ?: "",

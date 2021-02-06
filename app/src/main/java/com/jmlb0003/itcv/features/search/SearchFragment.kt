@@ -2,7 +2,6 @@ package com.jmlb0003.itcv.features.search
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -61,10 +60,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             SearchViewStateList.Loading -> displayLoading()
             SearchViewStateList.Empty -> displayEmptyResultsScreen()
             is SearchViewStateList.ListOfResults -> displayResults(state.results)
-            else -> displayError(state)
+            else -> displayError()
         }
         if (state != SearchViewStateList.Loading) {
             hideLoading()
+        }
+        if (state != SearchViewStateList.Empty) {
+            hideEmptyView()
+        }
+        if (state !is SearchViewStateList.ListOfResults) {
+            adapter?.setSearchResults(emptyList())
+        }
+        if (state != SearchViewStateList.Error) {
+            hideErrorView()
         }
     }
 
@@ -73,20 +81,26 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun displayEmptyResultsScreen() {
-//        TODO("Not yet implemented")
+        view?.findViewById<View>(R.id.empty_results_view)?.visibility = View.VISIBLE
+    }
+
+    private fun hideEmptyView() {
+        view?.findViewById<View>(R.id.empty_results_view)?.visibility = View.GONE
     }
 
     private fun displayLoading() {
-//        TODO("Not yet implemented")
-        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+        view?.findViewById<View>(R.id.search_loading)?.visibility = View.VISIBLE
     }
 
     private fun hideLoading() {
-//        TODO("Not yet implemented")
+        view?.findViewById<View>(R.id.search_loading)?.visibility = View.GONE
     }
 
-    private fun displayError(state: SearchViewStateList?) {
-//        TODO("Not yet implemented")
-        Toast.makeText(requireContext(), "Error: $state", Toast.LENGTH_SHORT).show()
+    private fun displayError() {
+        view?.findViewById<View>(R.id.error_results_view)?.visibility = View.VISIBLE
+    }
+
+    private fun hideErrorView() {
+        view?.findViewById<View>(R.id.error_results_view)?.visibility = View.GONE
     }
 }
