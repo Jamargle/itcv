@@ -1,4 +1,4 @@
-package com.jmlb0003.itcv.features.search.adapter
+package com.jmlb0003.itcv.features.profile.adapter
 
 import com.jmlb0003.itcv.domain.model.Repo
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem

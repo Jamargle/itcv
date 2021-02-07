@@ -1,7 +1,7 @@
 package com.jmlb0003.itcv.features.search.adapter
 
 import com.jmlb0003.itcv.domain.model.Repo
-import com.jmlb0003.itcv.features.search.adapter.RepositoryMappers.toRepositoryListItem
+import com.jmlb0003.itcv.features.profile.adapter.RepositoryMappers.toRepositoryListItem
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

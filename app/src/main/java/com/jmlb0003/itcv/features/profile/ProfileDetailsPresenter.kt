@@ -7,7 +7,7 @@ import com.jmlb0003.itcv.domain.model.ProfileDetails
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
-import com.jmlb0003.itcv.features.search.adapter.RepositoryMappers.toRepositoryListItem
+import com.jmlb0003.itcv.features.profile.adapter.RepositoryMappers.toRepositoryListItem
 import com.jmlb0003.itcv.utils.DateExtensions.toShortDateString
 
 class ProfileDetailsPresenter(

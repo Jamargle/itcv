@@ -39,6 +39,17 @@ class UserMappersTest {
     }
 
     @Test
+    fun `when right user response does not contain name it passes the username`() {
+        val expectedUsername = "Expected username"
+        val userResponse = getFakeUserResponse().copy(
+            username = expectedUsername,
+            name = null
+        )
+        val result = mapToDomain(userResponse)
+        assertEquals(expectedUsername, result.name)
+    }
+
+    @Test
     fun `when right user response does not contain bio it converts it to empty string`() {
         val userResponse = getFakeUserResponse().copy(bioDescription = null)
         val result = mapToDomain(userResponse)

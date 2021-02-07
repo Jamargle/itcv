@@ -3,6 +3,10 @@
     <!--  Home screen  -->
     <dimen name="home_avatar_image_size">100dp</dimen>
 
+
+    <dimen name="illustration_height">200dp</dimen>
+
+
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 

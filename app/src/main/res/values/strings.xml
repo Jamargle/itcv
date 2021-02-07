@@ -16,6 +16,8 @@
     <!--  Search  -->
     <string name="title_search">Search</string>
     <string name="search_hint">Look for a Github profile</string>
+    <string name="empty_results_title_label">There are no results.\nPlease try with another text.</string>
+    <string name="error_search_results">Sorry, something went wrong.\nPlease try again later.</string>
 
 
     <!--  Profile details  -->

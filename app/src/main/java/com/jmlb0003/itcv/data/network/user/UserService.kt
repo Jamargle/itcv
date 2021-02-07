@@ -7,6 +7,7 @@ import com.jmlb0003.itcv.core.NetworkHandler
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.data.network.BaseService
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
+import com.jmlb0003.itcv.data.network.user.response.search.SearchUserResponse
 import retrofit2.Response
 
 class UserService(
@@ -15,6 +16,7 @@ class UserService(
     networkHandler: NetworkHandler
 ) : BaseService(networkHandler, gson) {
 
+    // region getUserProfile
     fun getUserProfile(username: String): Either<Failure, UserResponse> =
         performCall(userApiClient.getUserProfile(username)).let {
             if (!it.isRight) {
@@ -30,4 +32,22 @@ class UserService(
         } catch (exception: JsonParseException) {
             Either.Left(Failure.NetworkRequestError(IllegalStateException("There was an error parsing response to fetch user's profile")))
         }
+    // endregion
+
+    // region searchUser by profileName
+    fun searchUser(usernameQuery: String): Either<Failure, SearchUserResponse> =
+        performCall(userApiClient.searchUserByUsername(usernameQuery)).let {
+            when (it) {
+                is Either.Left -> it
+                is Either.Right -> handleSearchUserByProfileNameResponse(it.rightValue)
+            }
+        }
+
+    private fun handleSearchUserByProfileNameResponse(response: Response<SearchUserResponse>) =
+        try {
+            Either.Right(requireNotNull(response.body()))
+        } catch (exception: JsonParseException) {
+            Either.Left(Failure.NetworkRequestError(IllegalStateException("There was an error parsing response for search")))
+        }
+    // endregion
 }

@@ -7,6 +7,7 @@ import com.jmlb0003.itcv.core.NetworkHandler
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.data.mockNetworkConnected
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
+import com.jmlb0003.itcv.data.network.user.response.search.SearchUserResponse
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.Request
@@ -72,6 +73,57 @@ class UserServiceTest {
         every { response.body() } returns responseBody
 
         val result = service.getUserProfile(username)
+        assertEquals(responseBody, (result as Either.Right).rightValue)
+    }
+
+    @Test
+    fun `on searchUser with failure from backend returns the failure`() {
+        networkHandler.mockNetworkConnected()
+        val call = mockk<Call<SearchUserResponse>>()
+        val username = "username"
+        every { apiClient.searchUserByUsername(username) } returns call
+        every { call.execute() } throws RuntimeException("")
+        val url = "https://some/url.com"
+        val request = Request.Builder().url(url).build()
+        every { call.request() } returns request
+
+        val result = service.searchUser(username)
+        assertTrue((result as Either.Left).leftValue is Failure.NetworkRequestError)
+    }
+
+    @Test
+    fun `on searchUser with error while parsing json from backend returns NetworkRequestError`() {
+        networkHandler.mockNetworkConnected()
+        val call = mockk<Call<SearchUserResponse>>()
+        val username = "username"
+        every { apiClient.searchUserByUsername(username) } returns call
+        val response = mockk<Response<SearchUserResponse>>()
+        every { call.execute() } returns response
+        every { response.isSuccessful } returns true
+        every { response.body() } throws JsonParseException("")
+
+
+        val result = service.searchUser(username)
+        assertTrue((result as Either.Left).leftValue is Failure.NetworkRequestError)
+        assertEquals(
+            "There was an error parsing response for search",
+            result.leftValue.error?.message
+        )
+    }
+
+    @Test
+    fun `on searchUser with success from backend returns the response`() {
+        networkHandler.mockNetworkConnected()
+        val call = mockk<Call<SearchUserResponse>>()
+        val username = "username"
+        every { apiClient.searchUserByUsername(username) } returns call
+        val response = mockk<Response<SearchUserResponse>>()
+        every { call.execute() } returns response
+        every { response.isSuccessful } returns true
+        val responseBody = mockk<SearchUserResponse>()
+        every { response.body() } returns responseBody
+
+        val result = service.searchUser(username)
         assertEquals(responseBody, (result as Either.Right).rightValue)
     }
 }
