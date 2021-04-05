@@ -2,7 +2,7 @@ package com.jmlb0003.itcv.features.profile
 
 import android.os.Parcelable
 import com.jmlb0003.itcv.domain.model.User
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ProfileDetailsArgs(
