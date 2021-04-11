@@ -4,8 +4,10 @@ import androidx.fragment.app.activityViewModels
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.di.mainInjector
 import com.jmlb0003.itcv.domain.usecases.GetUserProfileUseCase
+import com.jmlb0003.itcv.features.MainToolbarController
 
 class HomeInjector(
+    mainToolbarController: MainToolbarController,
     navigationTriggers: NavigationTriggers,
     getUserProfileUseCase: GetUserProfileUseCase,
     dispatchers: Dispatchers
@@ -13,6 +15,7 @@ class HomeInjector(
     val presenter by lazy {
         HomePresenter(
             viewState,
+            mainToolbarController,
             navigationTriggers,
             getUserProfileUseCase,
             dispatchers
@@ -23,9 +26,11 @@ class HomeInjector(
 
 fun getHomeInjector(scope: HomeFragment) =
     with(scope.requireActivity()) {
+        val mainToolbarController = scope.activityViewModels<MainToolbarController>().value
         val navigationTriggers = scope.activityViewModels<NavigationTriggers>().value
         val getUserProfileUseCase = GetUserProfileUseCase(mainInjector.repositoriesProvider.userRepository)
         HomeInjector(
+            mainToolbarController,
             navigationTriggers,
             getUserProfileUseCase,
             mainInjector.dispatchers
