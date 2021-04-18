@@ -5,6 +5,10 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+    <dialog
+        android:id="@+id/enter_user_dialog"
+        android:name="com.jmlb0003.itcv.features.input.InsertUserDialog" />
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.jmlb0003.itcv.features.home.HomeFragment"
