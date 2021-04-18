@@ -22,6 +22,10 @@
             android:id="@+id/navigation_profile_to_details"
             app:destination="@id/navigation_profile_details" />
 
+        <action
+            android:id="@+id/action_navigation_home_to_enter_user_dialog"
+            app:destination="@id/enter_user_dialog" />
+
     </fragment>
 
     <fragment

@@ -4,6 +4,7 @@ import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
+import com.jmlb0003.itcv.data.MissingDefaultUserNameFailure
 import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
@@ -180,6 +181,14 @@ class HomePresenterTest {
         createHomePresenter()
 
         verify { viewState.displayErrorMessage(R.string.error_dialog_no_network) }
+    }
+
+    @Test
+    fun `on init fetches profile info and displays the dialog to add default user if there is no default username`() {
+        every { usersRepository.getDefaultUser() } returns Either.Left(MissingDefaultUserNameFailure)
+        createHomePresenter()
+
+        verify { viewState.displayEnterUsernameDialog() }
     }
 
     @Test

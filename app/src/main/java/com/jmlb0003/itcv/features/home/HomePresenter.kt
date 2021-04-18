@@ -5,6 +5,7 @@ import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.core.mvp.Presenter
+import com.jmlb0003.itcv.data.MissingDefaultUserNameFailure
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
 import com.jmlb0003.itcv.features.MainToolbarController
@@ -48,6 +49,7 @@ class HomePresenter(
     private fun handleGetProfileError(result: Failure) {
         when (result) {
             is Failure.NetworkConnection -> viewState.displayErrorMessage(R.string.error_dialog_no_network)
+            is MissingDefaultUserNameFailure -> viewState.displayEnterUsernameDialog()
             else -> viewState.displayErrorMessage(R.string.error_dialog_generic_message)
         }
     }

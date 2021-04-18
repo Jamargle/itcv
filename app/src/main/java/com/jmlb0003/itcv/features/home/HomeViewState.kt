@@ -16,6 +16,8 @@ class HomeViewState {
 
     val errorState: MutableLiveData<HomeViewErrorState> = MutableLiveData()
 
+    fun displayEnterUsernameDialog() = errorState.postValue(HomeViewErrorState.ErrorMissingDefaultUser)
+
     fun displayErrorMessage(@StringRes errorStringResource: Int) =
         errorState.postValue(HomeViewErrorState.ErrorStringRes(errorStringResource))
 

@@ -23,7 +23,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val onFollowerCountChange = Observer<HomeViewStateList> { handleFollowerCountChange(it) }
     private val onUserWebsiteChange = Observer<HomeViewStateList> { handleWebsiteChange(it) }
     private val onTwitterAccountChange = Observer<HomeViewStateList> { handleTwitterAccountChange(it) }
-    private val onErrorTrigger = Observer<HomeViewErrorState> { displayErrorScreen(it) }
+    private val onErrorTrigger = Observer<HomeViewErrorState> { handleErrorState(it) }
     // endregion
 
     // region view fields
@@ -88,11 +88,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     // region view observers handlers
-    private fun displayErrorScreen(errorState: HomeViewErrorState) {
-        val errorMessage = when (errorState) {
-            is HomeViewErrorState.ErrorMessage -> errorState.errorMessage
-            is HomeViewErrorState.ErrorStringRes -> getString(errorState.errorStringRes)
+    private fun handleErrorState(newErrorState: HomeViewErrorState) {
+        when (newErrorState) {
+            is HomeViewErrorState.ErrorMessage -> displayErrorScreen(newErrorState.errorMessage)
+            is HomeViewErrorState.ErrorStringRes -> displayErrorScreen(getString(newErrorState.errorStringRes))
+            HomeViewErrorState.ErrorMissingDefaultUser -> {
+                findNavController().navigate(R.id.action_navigation_home_to_enter_user_dialog)
+            }
         }
+    }
+
+    private fun displayErrorScreen(errorMessage: String) {
         activity?.showErrorPopup(
             errorMessage = errorMessage,
             onNegativeButtonClicked = { /* NO-OP */ }
