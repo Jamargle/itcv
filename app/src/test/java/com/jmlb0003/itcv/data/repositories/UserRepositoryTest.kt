@@ -1,11 +1,15 @@
 package com.jmlb0003.itcv.data.repositories
 
 import com.jmlb0003.itcv.core.Either
+import com.jmlb0003.itcv.core.SharedPreferencesHandler
 import com.jmlb0003.itcv.core.exception.Failure
+import com.jmlb0003.itcv.data.MissingDefaultUserNameFailure
 import com.jmlb0003.itcv.data.network.user.UserService
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
+import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Date
@@ -13,8 +17,49 @@ import java.util.Date
 class UserRepositoryTest {
 
     private val userService = mockk<UserService>(relaxed = true)
+    private val sharedPreferences = mockk<SharedPreferencesHandler>(relaxed = true)
 
-    private val repository = UserRepository(userService)
+    private val repository = UserRepository(sharedPreferences, userService)
+
+    @Test
+    fun `on getDefaultUser if sharedPreferences returns empty then returns MissingDefaultUserNameFailure`() {
+        every { sharedPreferences.defaultUserName } returns ""
+
+        val result = repository.getDefaultUser()
+
+        verify { userService wasNot called }
+        assertEquals(MissingDefaultUserNameFailure, (result as Either.Left).leftValue)
+    }
+
+    @Test
+    fun `on getDefaultUser if sharedPreferences returns not empty then returns error if service returns error`() {
+        val expectedUsername = "some user name"
+        every { sharedPreferences.defaultUserName } returns expectedUsername
+        val error = Failure.NetworkConnection
+        every { userService.getUserProfile(expectedUsername) } returns Either.Left(error)
+
+        val result = repository.getDefaultUser()
+
+        assertEquals(error, (result as Either.Left).leftValue)
+    }
+
+    @Test
+    fun `on getDefaultUser if sharedPreferences returns not empty then returns the user if service returns an user`() {
+        val expectedUsername = "some user name"
+        every { sharedPreferences.defaultUserName } returns expectedUsername
+        val userResponse = getFakeUserResponse().copy(username = expectedUsername)
+        every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
+
+        val result = repository.getDefaultUser()
+
+        with((result as Either.Right).rightValue) {
+            assertEquals(expectedUsername, username)
+            assertEquals("zzz", name)
+            assertEquals("zzz", email)
+            assertEquals("zzz", location)
+            assertEquals(-1, repositoryCount)
+        }
+    }
 
     @Test
     fun `on getUser if service returns failure returns the error`() {

@@ -4,14 +4,10 @@ import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.User
 
-class GetUserProfileUseCase(
+class GetDefaultUserProfileUseCase(
     private val usersRepository: UserRepository
-) : UseCase<User, GetUserProfileUseCase.Input>() {
+) : UseCase<User, UseCase.None>() {
 
-    override suspend fun run(params: Input) =
-        usersRepository.getUser(params.username)
-
-    data class Input(
-        val username: String
-    )
+    override suspend fun run(params: None) =
+        usersRepository.getDefaultUser()
 }

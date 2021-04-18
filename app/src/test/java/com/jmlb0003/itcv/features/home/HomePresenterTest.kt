@@ -6,7 +6,7 @@ import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.User
-import com.jmlb0003.itcv.domain.usecases.GetUserProfileUseCase
+import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
 import com.jmlb0003.itcv.features.MainToolbarController
 import io.mockk.Called
 import io.mockk.every
@@ -32,13 +32,13 @@ class HomePresenterTest {
     private val toolbarController = mockk<MainToolbarController>(relaxed = true)
     private val navigationTriggers = mockk<NavigationTriggers>(relaxed = true)
     private val usersRepository = mockk<UserRepository>(relaxed = true)
-    private val getUserProfileUseCase = GetUserProfileUseCase(usersRepository)
+    private val getUserProfileUseCase = GetDefaultUserProfileUseCase(usersRepository)
 
     @Test
     fun `on init fetches profile info and if success then updates the title with the user name`() {
         val userName = "Some user name"
         val user = getFakeUser().copy(username = userName)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { toolbarController.setNewTitle(userName) }
@@ -48,7 +48,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success then displays the user name`() {
         val userName = "Some name"
         val user = getFakeUser().copy(name = userName)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayProfileName(userName) }
@@ -58,7 +58,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and bio not empty then displays the bio`() {
         val bio = "Some bio for the user"
         val user = getFakeUser().copy(bio = bio)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayBio(bio) }
@@ -68,7 +68,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and bio empty then hides the bio`() {
         val bio = ""
         val user = getFakeUser().copy(bio = bio)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.hideBio() }
@@ -78,7 +78,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and email not empty then displays the email`() {
         val email = "Some email"
         val user = getFakeUser().copy(email = email)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayEmail(email) }
@@ -88,7 +88,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and email empty then hides the email`() {
         val email = ""
         val user = getFakeUser().copy(email = email)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.hideEmail() }
@@ -98,7 +98,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and location not empty then displays the location`() {
         val location = "Some location"
         val user = getFakeUser().copy(location = location)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayLocation(location) }
@@ -108,7 +108,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and location empty then hides the location`() {
         val location = ""
         val user = getFakeUser().copy(location = location)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.hideLocation() }
@@ -118,7 +118,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success then displays the public repository count`() {
         val count = 123
         val user = getFakeUser().copy(repositoryCount = count)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayRepositoryCount(count.toString()) }
@@ -128,7 +128,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success then displays the github follower count`() {
         val count = 123
         val user = getFakeUser().copy(followerCount = count)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayFollowerCount(count.toString()) }
@@ -138,7 +138,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and website not empty then displays the website`() {
         val website = "Some website"
         val user = getFakeUser().copy(website = website)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayWebsite(website) }
@@ -148,7 +148,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and website empty then hides the website`() {
         val website = ""
         val user = getFakeUser().copy(website = website)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.hideWebsite() }
@@ -158,7 +158,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and twitterAccount not empty then displays the twitterAccount`() {
         val twitterAccount = "Some twitter account"
         val user = getFakeUser().copy(twitterAccount = twitterAccount)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.displayTwitterAccount(twitterAccount) }
@@ -168,7 +168,7 @@ class HomePresenterTest {
     fun `on init fetches profile info and if success and twitterAccount empty then hides the twitterAccount`() {
         val twitterAccount = ""
         val user = getFakeUser().copy(twitterAccount = twitterAccount)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         createHomePresenter()
 
         verify { viewState.hideTwitterAccount() }
@@ -176,7 +176,7 @@ class HomePresenterTest {
 
     @Test
     fun `on init fetches profile info and displays error if not succeeded`() {
-        every { usersRepository.getUser("Jamargle") } returns Either.Left(Failure.NetworkConnection)
+        every { usersRepository.getDefaultUser() } returns Either.Left(Failure.NetworkConnection)
         createHomePresenter()
 
         verify { viewState.displayErrorMessage(R.string.error_dialog_no_network) }
@@ -184,7 +184,7 @@ class HomePresenterTest {
 
     @Test
     fun `on onSeeAllClicked with current user null does nothing`() {
-        every { usersRepository.getUser("Jamargle") } returns Either.Left(Failure.NetworkConnection)
+        every { usersRepository.getDefaultUser() } returns Either.Left(Failure.NetworkConnection)
         val presenter = createHomePresenter()
         presenter.onSeeAllClicked()
 
@@ -195,7 +195,7 @@ class HomePresenterTest {
     @Test
     fun `on onSeeAllClicked with current user not null requests navigation to profile details with that user`() {
         val user = getFakeUser()
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         val presenter = createHomePresenter()
         presenter.onSeeAllClicked()
 
@@ -204,7 +204,7 @@ class HomePresenterTest {
 
     @Test
     fun `on onUserWebsiteClicked with current user null does nothing`() {
-        every { usersRepository.getUser("Jamargle") } returns Either.Left(Failure.NetworkConnection)
+        every { usersRepository.getDefaultUser() } returns Either.Left(Failure.NetworkConnection)
         val presenter = createHomePresenter()
         presenter.onUserWebsiteClicked()
 
@@ -216,7 +216,7 @@ class HomePresenterTest {
     fun `on onUserWebsiteClicked with current user not null requests navigation to profile details with that user`() {
         val website = "www.some_website.com"
         val user = getFakeUser().copy(website = website)
-        every { usersRepository.getUser("Jamargle") } returns Either.Right(user)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
         val presenter = createHomePresenter()
         presenter.onUserWebsiteClicked()
 

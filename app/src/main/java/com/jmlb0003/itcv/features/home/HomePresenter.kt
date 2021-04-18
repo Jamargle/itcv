@@ -3,24 +3,25 @@ package com.jmlb0003.itcv.features.home
 import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
+import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.core.mvp.Presenter
 import com.jmlb0003.itcv.domain.model.User
-import com.jmlb0003.itcv.domain.usecases.GetUserProfileUseCase
+import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
 import com.jmlb0003.itcv.features.MainToolbarController
 
 class HomePresenter(
     private val viewState: HomeViewState,
     private val mainToolbarController: MainToolbarController,
     private val navigationTriggers: NavigationTriggers,
-    getUserProfileUseCase: GetUserProfileUseCase,
+    getDefaultUserProfileUseCase: GetDefaultUserProfileUseCase,
     dispatchers: Dispatchers
 ) : Presenter(dispatchers) {
 
     init {
-        getUserProfileUseCase(
+        getDefaultUserProfileUseCase(
             coroutineScope = this,
             dispatchers = dispatchers,
-            params = GetUserProfileUseCase.Input("Jamargle")
+            params = UseCase.None
         ) {
             it.either(::handleGetProfileError) { user -> handleGetProfileSuccess(user) }
         }

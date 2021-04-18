@@ -3,6 +3,7 @@ package com.jmlb0003.itcv.domain.usecases
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
+import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.User
 import io.mockk.every
@@ -20,13 +21,13 @@ import org.junit.Test
 import java.util.Date
 
 @ExperimentalCoroutinesApi
-class GetUserProfileUseCaseTest {
+class GetDefaultUserProfileUseCaseTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
     private val dispatchers = TestDispatchers(testDispatcher)
 
     private val userRepository = mockk<UserRepository>()
-    private val useCase = GetUserProfileUseCase(userRepository)
+    private val useCase = GetDefaultUserProfileUseCase(userRepository)
 
     @Before
     fun setup() {
@@ -42,28 +43,26 @@ class GetUserProfileUseCaseTest {
     @Test
     fun `on runUseCase with error result returns the error`() = testDispatcher.runBlockingTest {
         val someFailure = Failure.NetworkConnection
-        val username = "SomeUsername"
-        every { userRepository.getUser(username) } returns Either.Left(someFailure)
+        every { userRepository.getDefaultUser() } returns Either.Left(someFailure)
 
         useCase(
             coroutineScope = this,
             dispatchers = dispatchers,
-            params = GetUserProfileUseCase.Input(username)
+            params = UseCase.None
         ) {
             assertEquals(someFailure, (it as Either.Left).leftValue)
         }
     }
 
     @Test
-    fun `on runUseCase with success result returns the user's profile`() = testDispatcher.runBlockingTest {
+    fun `on runUseCase with success result returns the default user's profile`() = testDispatcher.runBlockingTest {
         val someUser = getFakeUser()
-        val username = "SomeUsername"
-        every { userRepository.getUser(username) } returns Either.Right(someUser)
+        every { userRepository.getDefaultUser() } returns Either.Right(someUser)
 
         useCase(
             coroutineScope = this,
             dispatchers = dispatchers,
-            params = GetUserProfileUseCase.Input(username)
+            params = UseCase.None
         ) {
             assertEquals(someUser, (it as Either.Right).rightValue)
         }
