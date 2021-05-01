@@ -19,6 +19,15 @@ import com.jmlb0003.itcv.utils.showErrorPopup
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     // region view state observers
+    private val onLoadingStateChange = Observer<Boolean> { isToBeShown ->
+        view?.findViewById<ProgressBar>(R.id.loading_view)?.let {
+            if (isToBeShown) {
+                it.visibility = View.VISIBLE
+            } else {
+                it.visibility = View.GONE
+            }
+        }
+    }
     private val onUserNameChange = Observer<HomeViewStateList> { handleUserNameChange(it) }
     private val onUserBioChange = Observer<HomeViewStateList> { handleUserBioChange(it) }
     private val onEmailChange = Observer<HomeViewStateList> { handleEmailChange(it) }
@@ -100,6 +109,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun initViewStateObservers() {
         with(viewModel.nonNullViewState) {
+            loadingState.observe(viewLifecycleOwner, onLoadingStateChange)
             profileNameState.observe(viewLifecycleOwner, onUserNameChange)
             profileBioState.observe(viewLifecycleOwner, onUserBioChange)
             emailState.observe(viewLifecycleOwner, onEmailChange)

@@ -36,6 +36,26 @@ class HomePresenterTest {
     private val getUserProfileUseCase = GetDefaultUserProfileUseCase(usersRepository)
 
     @Test
+    fun `on init displays loading while fetching profile info`() {
+        createHomePresenter()
+        verify { viewState.displayLoading() }
+    }
+
+    @Test
+    fun `on init hides loading after fetching profile info with success`() {
+        every { usersRepository.getDefaultUser() } returns Either.Right(mockk(relaxed = true))
+        createHomePresenter()
+        verify { viewState.hideLoading() }
+    }
+
+    @Test
+    fun `on init hides loading after fetching profile info with error`() {
+        every { usersRepository.getDefaultUser() } returns Either.Left(mockk(relaxed = true))
+        createHomePresenter()
+        verify { viewState.hideLoading() }
+    }
+
+    @Test
     fun `on init fetches profile info and if success then updates the title with the user name`() {
         val userName = "Some user name"
         val user = getFakeUser().copy(username = userName)
@@ -189,6 +209,29 @@ class HomePresenterTest {
         createHomePresenter()
 
         verify { viewState.displayEnterUsernameDialog() }
+    }
+
+    @Test
+    fun `on onDefaultUsernameChange displays loading while fetching profile info`() {
+        val presenter = createHomePresenter()
+        presenter.onDefaultUsernameChange()
+        verify(exactly = 2) { viewState.displayLoading() }
+    }
+
+    @Test
+    fun `on onDefaultUsernameChange hides loading after fetching profile info with success`() {
+        every { usersRepository.getDefaultUser() } returns Either.Right(mockk(relaxed = true))
+        val presenter = createHomePresenter()
+        presenter.onDefaultUsernameChange()
+        verify(exactly = 2) { viewState.hideLoading() }
+    }
+
+    @Test
+    fun `on onDefaultUsernameChange hides loading after fetching profile info with error`() {
+        every { usersRepository.getDefaultUser() } returns Either.Left(mockk(relaxed = true))
+        val presenter = createHomePresenter()
+        presenter.onDefaultUsernameChange()
+        verify(exactly = 2) { viewState.hideLoading() }
     }
 
     @Test

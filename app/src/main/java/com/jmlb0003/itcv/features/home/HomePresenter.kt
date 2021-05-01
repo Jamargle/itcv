@@ -37,6 +37,7 @@ class HomePresenter(
     }
 
     private fun getDefaultUserProfile() {
+        viewState.displayLoading()
         getDefaultUserProfileUseCase(
             coroutineScope = this,
             dispatchers = dispatchers,
@@ -47,6 +48,7 @@ class HomePresenter(
     }
 
     private fun handleGetProfileSuccess(user: User) {
+        viewState.hideLoading()
         with(user) {
             currentUser = this
             mainToolbarController.setNewTitle(username)
@@ -55,6 +57,7 @@ class HomePresenter(
     }
 
     private fun handleGetProfileError(result: Failure) {
+        viewState.hideLoading()
         when (result) {
             is Failure.NetworkConnection -> viewState.displayErrorMessage(R.string.error_dialog_no_network)
             is MissingDefaultUserNameFailure -> viewState.displayEnterUsernameDialog()

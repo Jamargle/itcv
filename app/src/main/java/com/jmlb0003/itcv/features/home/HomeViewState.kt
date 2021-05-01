@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 
 class HomeViewState {
 
+    val loadingState: MutableLiveData<Boolean> = MutableLiveData(true)
     val profileNameState: MutableLiveData<HomeViewStateList> = MutableLiveData()
     val profileBioState: MutableLiveData<HomeViewStateList> = MutableLiveData()
     val emailState: MutableLiveData<HomeViewStateList> = MutableLiveData()
@@ -15,6 +16,10 @@ class HomeViewState {
     val twitterAccountState: MutableLiveData<HomeViewStateList> = MutableLiveData()
 
     val errorState: MutableLiveData<HomeViewErrorState> = MutableLiveData()
+
+    fun displayLoading() = loadingState.postValue(true)
+
+    fun hideLoading() = loadingState.postValue(false)
 
     fun displayEnterUsernameDialog() = errorState.postValue(HomeViewErrorState.ErrorMissingDefaultUser)
 
