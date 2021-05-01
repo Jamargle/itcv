@@ -13,6 +13,11 @@ class UserRepository(
     private val userService: UserService
 ) {
 
+    fun updateDefaultUser(username: String): Either<Failure, String> {
+        sharedPreferencesHandler.defaultUserName = username
+        return Either.Right(sharedPreferencesHandler.defaultUserName)
+    }
+
     fun getDefaultUser(): Either<Failure, User> {
         val username = sharedPreferencesHandler.defaultUserName
         return if (username.isNotEmpty()) {

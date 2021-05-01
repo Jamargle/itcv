@@ -2,14 +2,18 @@ package com.jmlb0003.itcv.features.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentOnAttachListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.features.input.InsertUserDialog
 import com.jmlb0003.itcv.utils.showErrorPopup
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -44,6 +48,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         initViewStateObservers()
     }
 
+    override fun onDestroy() {
+        parentFragmentManager.removeFragmentOnAttachListener(insertUserDialogListener)
+        super.onDestroy()
+    }
+
     private fun initViews(rootView: View) {
         with(rootView) {
             userName = findViewById(R.id.user_name)
@@ -73,6 +82,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    // region LiveData stuff to get the update of the default username from the dialog
+    private val observableUsername by lazy { MutableLiveData<String>() }
+    private val insertUserDialogListener by lazy {
+        FragmentOnAttachListener { _, fragment ->
+            if (fragment is InsertUserDialog) {
+                fragment.setUsernameChangeTrigger(observableUsername)
+            }
+        }
+    }
+
+    private fun setupUsernameChangeListener() {
+        parentFragmentManager.addFragmentOnAttachListener(insertUserDialogListener)
+        observableUsername.observe(viewLifecycleOwner, { viewModel.presenter.onDefaultUsernameChange() })
+    }
+    // endregion
+
     private fun initViewStateObservers() {
         with(viewModel.nonNullViewState) {
             profileNameState.observe(viewLifecycleOwner, onUserNameChange)
@@ -93,6 +118,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             is HomeViewErrorState.ErrorMessage -> displayErrorScreen(newErrorState.errorMessage)
             is HomeViewErrorState.ErrorStringRes -> displayErrorScreen(getString(newErrorState.errorStringRes))
             HomeViewErrorState.ErrorMissingDefaultUser -> {
+                if (parentFragmentManager.fragments.find { it is InsertUserDialog } != null) {
+                    // TODO Fix error here when rotating the screen:
+                    //  When no username, the dialog to insert one is displayed
+                    //  Rotate device once it is displayed
+                    //  it crashes here
+                    return
+                }
+                setupUsernameChangeListener()
                 findNavController().navigate(R.id.action_navigation_home_to_enter_user_dialog)
             }
         }

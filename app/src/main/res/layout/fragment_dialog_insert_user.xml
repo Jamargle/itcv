@@ -19,6 +19,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/default_username_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/default_user_chooser_hint"
@@ -27,6 +28,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/insert_user_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

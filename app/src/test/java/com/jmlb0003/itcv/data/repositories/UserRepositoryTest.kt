@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Date
 
@@ -20,6 +21,15 @@ class UserRepositoryTest {
     private val sharedPreferences = mockk<SharedPreferencesHandler>(relaxed = true)
 
     private val repository = UserRepository(sharedPreferences, userService)
+
+    @Test
+    fun `on updateDefaultUser sets given username as default and return Right result`() {
+        val newUser = "Some username"
+        val result = repository.updateDefaultUser(newUser)
+
+        verify { sharedPreferences.defaultUserName = newUser }
+        assertTrue(result is Either.Right)
+    }
 
     @Test
     fun `on getDefaultUser if sharedPreferences returns empty then returns MissingDefaultUserNameFailure`() {

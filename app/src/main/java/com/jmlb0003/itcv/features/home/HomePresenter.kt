@@ -14,21 +14,19 @@ class HomePresenter(
     private val viewState: HomeViewState,
     private val mainToolbarController: MainToolbarController,
     private val navigationTriggers: NavigationTriggers,
-    getDefaultUserProfileUseCase: GetDefaultUserProfileUseCase,
-    dispatchers: Dispatchers
+    private val getDefaultUserProfileUseCase: GetDefaultUserProfileUseCase,
+    private val dispatchers: Dispatchers
 ) : Presenter(dispatchers) {
 
     init {
-        getDefaultUserProfileUseCase(
-            coroutineScope = this,
-            dispatchers = dispatchers,
-            params = UseCase.None
-        ) {
-            it.either(::handleGetProfileError) { user -> handleGetProfileSuccess(user) }
-        }
+        getDefaultUserProfile()
     }
 
     private var currentUser: User? = null
+
+    fun onDefaultUsernameChange() {
+        getDefaultUserProfile()
+    }
 
     fun onSeeAllClicked() {
         currentUser?.let { navigationTriggers.navigateToProfileDetails(it) }
@@ -36,6 +34,16 @@ class HomePresenter(
 
     fun onUserWebsiteClicked() {
         currentUser?.website?.let { navigationTriggers.openUrl(it) }
+    }
+
+    private fun getDefaultUserProfile() {
+        getDefaultUserProfileUseCase(
+            coroutineScope = this,
+            dispatchers = dispatchers,
+            params = UseCase.None
+        ) {
+            it.either(::handleGetProfileError, ::handleGetProfileSuccess)
+        }
     }
 
     private fun handleGetProfileSuccess(user: User) {
