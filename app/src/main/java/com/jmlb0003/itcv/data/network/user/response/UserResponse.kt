@@ -5,7 +5,7 @@ import java.util.Date
 
 data class UserResponse(
     @SerializedName("login") val username: String,
-    @SerializedName("name") val name: String,
+    @SerializedName("name") val name: String?,
     @SerializedName("bio") val bioDescription: String?,
     @SerializedName("email") val email: String?,
     @SerializedName("location") val location: String?,

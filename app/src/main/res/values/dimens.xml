@@ -6,6 +6,10 @@
     <!--  Default user chooser  -->
     <dimen name="default_user_chooser_min_width">300dp</dimen>
 
+
+    <dimen name="illustration_height">200dp</dimen>
+
+
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
