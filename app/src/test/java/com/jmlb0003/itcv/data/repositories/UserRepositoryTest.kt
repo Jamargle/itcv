@@ -1,7 +1,9 @@
 package com.jmlb0003.itcv.data.repositories
 
 import com.jmlb0003.itcv.core.Either
+import com.jmlb0003.itcv.core.SharedPreferencesHandler
 import com.jmlb0003.itcv.core.exception.Failure
+import com.jmlb0003.itcv.data.MissingDefaultUserNameFailure
 import com.jmlb0003.itcv.data.network.user.UserService
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
 import com.jmlb0003.itcv.data.network.user.response.search.ResultItem
@@ -10,18 +12,67 @@ import com.jmlb0003.itcv.data.repositories.mappers.SearchResultsMappers
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.model.User
+import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class UserRepositoryTest {
 
     private val userService = mockk<UserService>(relaxed = true)
+    private val sharedPreferences = mockk<SharedPreferencesHandler>(relaxed = true)
     private val usersMapper = mockk<UserMappers>(relaxed = true)
     private val searchResultsMapper = mockk<SearchResultsMappers>(relaxed = true)
 
-    private val repository = UserRepository(userService, usersMapper, searchResultsMapper)
+    private val repository = UserRepository(sharedPreferences, userService, usersMapper, searchResultsMapper)
+
+    @Test
+    fun `on updateDefaultUser sets given username as default and return Right result`() {
+        val newUser = "Some username"
+        val result = repository.updateDefaultUser(newUser)
+
+        verify { sharedPreferences.defaultUserName = newUser }
+        assertTrue(result is Either.Right)
+    }
+
+    @Test
+    fun `on getDefaultUser if sharedPreferences returns empty then returns MissingDefaultUserNameFailure`() {
+        every { sharedPreferences.defaultUserName } returns ""
+
+        val result = repository.getDefaultUser()
+
+        verify { userService wasNot called }
+        assertEquals(MissingDefaultUserNameFailure, (result as Either.Left).leftValue)
+    }
+
+    @Test
+    fun `on getDefaultUser if sharedPreferences returns not empty then returns error if service returns error`() {
+        val expectedUsername = "some user name"
+        every { sharedPreferences.defaultUserName } returns expectedUsername
+        val error = Failure.NetworkConnection
+        every { userService.getUserProfile(expectedUsername) } returns Either.Left(error)
+
+        val result = repository.getDefaultUser()
+
+        assertEquals(error, (result as Either.Left).leftValue)
+    }
+
+    @Test
+    fun `on getDefaultUser if sharedPreferences returns not empty then returns the user if service returns an user`() {
+        val expectedUsername = "some user name"
+        every { sharedPreferences.defaultUserName } returns expectedUsername
+        val userResponse = mockk<UserResponse>()
+        every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
+        val expectedUser = mockk<User>()
+        every { usersMapper.mapToDomain(userResponse) } returns expectedUser
+
+        val result = repository.getDefaultUser()
+
+        assertEquals(expectedUser, (result as Either.Right).rightValue)
+    }
 
     @Test
     fun `on getUser if service returns failure returns the error`() {

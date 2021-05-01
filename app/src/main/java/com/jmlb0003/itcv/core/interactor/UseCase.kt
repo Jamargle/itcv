@@ -32,5 +32,5 @@ abstract class UseCase<out Type, in Params> where Type : Any {
     /**
      * When no input parameters needed set [None] as input
      */
-    class None
+    object None
 }

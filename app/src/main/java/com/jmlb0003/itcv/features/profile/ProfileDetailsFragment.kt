@@ -2,6 +2,7 @@ package com.jmlb0003.itcv.features.profile
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -14,7 +15,6 @@ import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.MainToolbarController
 import com.jmlb0003.itcv.features.profile.adapter.ReposAdapter
 import com.jmlb0003.itcv.utils.showErrorPopup
-import kotlinx.android.synthetic.main.fragment_profile_details.*
 
 class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
@@ -31,13 +31,26 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     private val onErrorTrigger = Observer<ProfileDetailsStateList> { displayError(it) }
     // endregion
 
+    // region view fields
+    private var userName: TextView? = null
+    private var memberSince: TextView? = null
+    private var userBio: TextView? = null
+    private var userEmail: TextView? = null
+    private var userLocation: TextView? = null
+    private var userWeb: TextView? = null
+    private var followersCount: TextView? = null
+    private var twitterUserName: TextView? = null
+    private var loadingView: ProgressBar? = null
+    private var repositoryList: RecyclerView? = null
+    // endregion
+
     private val viewModel by viewModels<ProfileDetailsViewModel> { getProfileDetailsViewModelFactory() }
     private var reposAdapter: ReposAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        initViewListeners(view)
+        initViews(view)
         initRepositoryListView(view)
         initViewStateObservers()
 
@@ -53,8 +66,23 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         )
     }
 
-    private fun initViewListeners(rootView: View) {
-        rootView.findViewById<View>(R.id.user_web)?.setOnClickListener {
+    private fun initViews(rootView: View) {
+        userName = rootView.findViewById(R.id.user_name)
+        memberSince = rootView.findViewById(R.id.member_since)
+        userBio = rootView.findViewById(R.id.user_bio)
+        userEmail = rootView.findViewById(R.id.user_email)
+        userLocation = rootView.findViewById(R.id.user_location)
+        userWeb = rootView.findViewById(R.id.user_web)
+        followersCount = rootView.findViewById(R.id.followers_count)
+        twitterUserName = rootView.findViewById(R.id.twitter_username)
+        loadingView = rootView.findViewById(R.id.loading_repository_list_view)
+        repositoryList = rootView.findViewById(R.id.repository_list)
+
+        initViewListeners()
+    }
+
+    private fun initViewListeners() {
+        userWeb?.setOnClickListener {
             viewModel.presenter.onUserWebsiteClicked(getUserWebsite())
         }
     }
@@ -93,41 +121,44 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         ?: throw IllegalStateException("There needs to be a ProfileDetailsArgs input")
 
     private fun handleUserNameChange(state: ProfileDetailsStateList) {
-        user_name?.updateLabelViewState(state)
+        userName.updateLabelViewState(state)
     }
 
     private fun handleMemberSinceChange(state: ProfileDetailsStateList) {
-        member_since?.updateLabelViewState(state)
+        memberSince.updateLabelViewState(state)
     }
 
     private fun handleUserBioChange(state: ProfileDetailsStateList) {
-        user_bio?.updateLabelViewState(state)
+        userBio.updateLabelViewState(state)
     }
 
     private fun handleEmailChange(state: ProfileDetailsStateList) {
-        user_email?.updateLabelViewState(state)
+        userEmail.updateLabelViewState(state)
     }
 
     private fun handleLocationChange(state: ProfileDetailsStateList) {
-        user_location?.updateLabelViewState(state) { R.string.profile_details_location }
+        userLocation.updateLabelViewState(state) { R.string.profile_details_location }
     }
 
     private fun handleFollowerCountChange(state: ProfileDetailsStateList) {
-        followers_count?.updateLabelViewState(state) { R.string.profile_details_followers_count }
+        followersCount.updateLabelViewState(state) { R.string.profile_details_followers_count }
     }
 
     private fun handleWebsiteChange(state: ProfileDetailsStateList) {
-        user_web?.updateLabelViewState(state)
+        userWeb.updateLabelViewState(state)
     }
 
     private fun handleTwitterAccountChange(state: ProfileDetailsStateList) {
-        twitter_username?.updateLabelViewState(state)
+        twitterUserName.updateLabelViewState(state)
     }
 
-    private fun TextView.updateLabelViewState(
+    private fun TextView?.updateLabelViewState(
         state: ProfileDetailsStateList,
         onLabelReady: (() -> Int)? = null
     ) {
+        if (this == null) {
+            return
+        }
         when (state) {
             is ProfileDetailsStateList.Ready -> {
                 visibility = View.VISIBLE
@@ -165,15 +196,15 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     }
 
     private fun displayRepositoriesLoading() {
-        loading_repository_list_view?.visibility = View.VISIBLE
+        loadingView?.visibility = View.VISIBLE
     }
 
     private fun hideRepositoriesLoadingView() {
-        loading_repository_list_view?.visibility = View.GONE
+        loadingView?.visibility = View.GONE
     }
 
     private fun hideRepositoriesView() {
-        repository_list?.visibility = View.GONE
+        repositoryList?.visibility = View.GONE
     }
 
     companion object {

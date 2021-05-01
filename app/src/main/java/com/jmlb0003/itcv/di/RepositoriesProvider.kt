@@ -13,7 +13,14 @@ import com.jmlb0003.itcv.utils.ApiServiceGenerator
 
 class RepositoriesProvider(private val mainInjector: MainInjector) {
 
-    val userRepository by lazy { UserRepository(userService, UserMappers, SearchResultsMappers) }
+    val userRepository by lazy {
+        UserRepository(
+            mainInjector.sharedPreferencesHandler,
+            userService,
+            UserMappers,
+            SearchResultsMappers
+        )
+    }
     val repositoriesRepository by lazy { ReposRepository(repoService, ReposMappers) }
 
     private val networkHandler get() = mainInjector.networkHandler

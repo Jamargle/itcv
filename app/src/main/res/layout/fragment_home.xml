@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="github_avatar" />
+        app:constraint_referenced_ids="github_avatar,see_all_details_button" />
 
     <TextView
         android:id="@+id/user_email"
@@ -157,23 +157,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default"
-        app:layout_constraintBottom_toTopOf="@id/member_since"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/public_repos_count"
         tools:text="This user has X followers" />
-
-    <TextView
-        android:id="@+id/member_since"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/followers_count"
-        app:layout_constraintVertical_bias="0"
-        tools:text="Member since: 31/12/1001" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/home_fab"
@@ -184,5 +172,16 @@
         android:src="@drawable/ic_search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

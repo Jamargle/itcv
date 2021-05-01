@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">ITCV</string>
 
+    <!--  Choose default user dialog  -->
+    <string name="default_user_chooser_title">Choose a default user:</string>
+    <string name="default_user_chooser_hint">Github username</string>
+    <string name="default_user_chooser_button">Done</string>
+
     <!--  Home  -->
     <string name="title_home">Home</string>
-    <string name="home_repository_count_label">This user has %d public repositories</string>
+    <string name="home_repository_count_label">This user has %s public repositories</string>
     <string name="home_github_avatar_content_description">Github avatar for this profile</string>
     <string name="content_description_home_fab">Search</string>
     <string name="home_profile_all_details_button">See all details</string>

@@ -12,12 +12,11 @@ abstract class BaseSharedPreferencesHandler(
     private val sharedPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
-    protected fun getBoolean(@StringRes key: Int, defaultValue: Boolean = false) =
-        sharedPreferences.getBoolean(getPrefKey(key), defaultValue)
+    protected fun getString(@StringRes key: Int, defaultValue: String? = "") =
+        sharedPreferences.getString(getPrefKey(key), defaultValue)
 
-    protected fun setBoolean(@StringRes key: Int, value: Boolean) {
-        sharedPreferences.edit().putBoolean(getPrefKey(key), value).apply()
-    }
+    protected fun setString(@StringRes key: Int, value: String) =
+        sharedPreferences.edit().putString(getPrefKey(key), value).apply()
 
     private fun getPrefKey(@StringRes key: Int) = context.getString(key)
 }
