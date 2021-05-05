@@ -5,9 +5,13 @@ import com.jmlb0003.itcv.features.search.adapter.SearchResult as ResultListItem
 
 object SearchResultMappers {
 
-    fun SearchResult.toSearchResultListItem() =
-        ResultListItem(
-            username = title,
-            isFavorite = false
-        )
+    fun mapToSearchResultListItem(results: List<SearchResult>) =
+        with(results) {
+            map {
+                ResultListItem(
+                    username = it.title,
+                    isFavorite = false
+                )
+            }
+        }
 }
