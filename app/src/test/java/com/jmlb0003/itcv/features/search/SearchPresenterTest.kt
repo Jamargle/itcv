@@ -3,8 +3,8 @@ package com.jmlb0003.itcv.features.search
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
-import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.SearchResult
+import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.SearchUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
 import io.mockk.called

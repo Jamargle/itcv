@@ -9,20 +9,21 @@ import com.jmlb0003.itcv.data.repositories.mappers.SearchResultsMappers
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.model.User
+import com.jmlb0003.itcv.domain.repositories.UserRepository as UserRepositoryInterface
 
 class UserRepository(
     private val sharedPreferencesHandler: SharedPreferencesHandler,
     private val userService: UserService,
     private val userMappers: UserMappers,
     private val searchResultsMappers: SearchResultsMappers
-) {
+) : UserRepositoryInterface {
 
-    fun updateDefaultUser(username: String): Either<Failure, String> {
+    override fun updateDefaultUser(username: String): Either<Failure, String> {
         sharedPreferencesHandler.defaultUserName = username
         return Either.Right(sharedPreferencesHandler.defaultUserName)
     }
 
-    fun getDefaultUser(): Either<Failure, User> {
+    override fun getDefaultUser(): Either<Failure, User> {
         val username = sharedPreferencesHandler.defaultUserName
         return if (username.isNotEmpty()) {
             getUser(username)
@@ -31,13 +32,13 @@ class UserRepository(
         }
     }
 
-    fun getUser(username: String): Either<Failure, User> =
+    override fun getUser(username: String): Either<Failure, User> =
         when (val result = userService.getUserProfile(username)) {
             is Either.Left -> result
             is Either.Right -> Either.Right(userMappers.mapToDomain(result.rightValue))
         }
 
-    fun searchUserByUsername(query: String): Either<Failure, List<SearchResult>> =
+    override fun searchUserByUsername(query: String): Either<Failure, List<SearchResult>> =
         when (val result = userService.searchUser(query)) {
             is Either.Left -> result
             is Either.Right -> Either.Right(result.rightValue.results.map { searchResultsMappers.mapToDomain(it) })

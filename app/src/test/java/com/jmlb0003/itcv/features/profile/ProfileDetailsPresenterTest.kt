@@ -3,10 +3,10 @@ package com.jmlb0003.itcv.features.profile
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
-import com.jmlb0003.itcv.data.repositories.ReposRepository
-import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.Repo
 import com.jmlb0003.itcv.domain.model.User
+import com.jmlb0003.itcv.domain.repositories.ReposRepository
+import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
