@@ -6,13 +6,16 @@ import com.jmlb0003.itcv.core.mvp.Presenter
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.usecases.SearchUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
-import com.jmlb0003.itcv.features.search.adapter.SearchResultMappers.toSearchResultListItem
+import com.jmlb0003.itcv.features.search.adapter.SearchResultMappers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.jmlb0003.itcv.features.search.adapter.SearchResult as ResultListItem
 
 class SearchPresenter(
     private val viewState: SearchViewState,
     private val navigationTriggers: NavigationTriggers,
     private val searchUseCase: SearchUseCase,
+    private val resultsMapper: SearchResultMappers,
     private val dispatchers: Dispatchers
 ) : Presenter(dispatchers) {
 
@@ -47,11 +50,19 @@ class SearchPresenter(
         if (results.isEmpty()) {
             viewState.displayEmptyScreen()
         } else {
-            viewState.displayResults(results.map { it.toSearchResultListItem() })
+            launch {
+                val resultsToShow = mapResultsToPresentation(results)
+                viewState.displayResults(resultsToShow)
+            }
         }
     }
 
     private fun handleSearchError(error: Failure) {
         viewState.displayErrorScreen()
     }
+
+    private suspend fun mapResultsToPresentation(results: List<SearchResult>) =
+        withContext(dispatchers.backgroundThread) {
+            resultsMapper.mapToSearchResultListItem(results)
+        }
 }

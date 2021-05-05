@@ -3,14 +3,14 @@ package com.jmlb0003.itcv.features.search
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
-import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.SearchResult
+import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.SearchUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
+import com.jmlb0003.itcv.features.search.adapter.SearchResultMappers
 import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,7 +19,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import com.jmlb0003.itcv.features.search.adapter.SearchResult as ResultListItem
@@ -32,9 +31,10 @@ class SearchPresenterTest {
 
     private val viewState = mockk<SearchViewState>(relaxed = true)
     private val navigationTriggers = mockk<NavigationTriggers>(relaxed = true)
+    private val resultsMapper = mockk<SearchResultMappers>(relaxed = true)
     private val userRepository = mockk<UserRepository>(relaxed = true)
     private val searchUseCase = SearchUseCase(userRepository)
-    private val presenter = SearchPresenter(viewState, navigationTriggers, searchUseCase, dispatchers)
+    private val presenter = SearchPresenter(viewState, navigationTriggers, searchUseCase, resultsMapper, dispatchers)
 
     @Test
     fun `on onSubmitSearch with null query does nothing`() {
@@ -82,28 +82,14 @@ class SearchPresenterTest {
     fun `on onSubmitSearch with valid query and searchUseCase resulting on success with results displays the results screen`() =
         testDispatcher.runBlockingTest {
             val query = "some query"
-            val expectedTitle1 = "some title"
-            val expectedImageUrl1 = "some url"
-            val expectedTitle2 = "another title"
-            val expectedImageUrl2 = "another url"
-            val results = listOf(
-                getFakeDomainResult().copy(
-                    title = expectedTitle1,
-                    imageUrl = expectedImageUrl1
-                ),
-                getFakeDomainResult().copy(
-                    title = expectedTitle2,
-                    imageUrl = expectedImageUrl2
-                )
-            )
+            val results = listOf(mockk<SearchResult>(), mockk())
             every { userRepository.searchUserByUsername(query) } returns Either.Right(results)
+            val expectedResults = mockk<List<ResultListItem>>()
+            every { resultsMapper.mapToSearchResultListItem(results) } returns expectedResults
 
             presenter.onSubmitSearch(query)
 
-            val resultsToDisplay = slot<List<ResultListItem>>()
-            verify { viewState.displayResults(capture(resultsToDisplay)) }
-            assertEquals(expectedTitle1, resultsToDisplay.captured[0].username)
-            assertEquals(expectedTitle2, resultsToDisplay.captured[1].username)
+            verify { viewState.displayResults(expectedResults) }
         }
 
     @Test
@@ -158,10 +144,4 @@ class SearchPresenterTest {
         Dispatchers.resetMain()
         testDispatcher.cleanupTestCoroutines()
     }
-
-    private fun getFakeDomainResult() =
-        SearchResult(
-            title = "ttt",
-            imageUrl = "iii"
-        )
 }

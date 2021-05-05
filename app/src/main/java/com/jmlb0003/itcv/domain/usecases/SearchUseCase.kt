@@ -3,8 +3,8 @@ package com.jmlb0003.itcv.domain.usecases
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.interactor.UseCase
-import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.domain.model.SearchResult
+import com.jmlb0003.itcv.domain.repositories.UserRepository
 
 class SearchUseCase(
     private val usersRepository: UserRepository
