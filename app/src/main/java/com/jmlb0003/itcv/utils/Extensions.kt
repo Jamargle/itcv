@@ -2,6 +2,9 @@ package com.jmlb0003.itcv.utils
 
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.jmlb0003.itcv.R
 
 fun FragmentActivity.showErrorPopup(
@@ -34,5 +37,18 @@ fun FragmentActivity.showErrorPopup(
             }
         }
     }
-    builder.create().show()
+    val dialog = builder.create()
+
+    lifecycle.addObserver(object : LifecycleObserver {
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        fun displayDialog() {
+            dialog.show()
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        fun dismissDialog() {
+            dialog.dismiss()
+        }
+    })
 }
