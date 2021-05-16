@@ -24,15 +24,18 @@ abstract class BaseService(
                     return if (isSuccessful) {
                         Either.Right(this)
                     } else {
-                        Either.Left(handleNonSuccessResponse(errorBody()))
+                        val errorBody = errorBody()
+                        val error = handleNonSuccessResponse(errorBody)
+                        errorBody?.close()
+                        Either.Left(error)
                     }
                 }
             } catch (exception: JsonParseException) {
                 Either.Left(Failure.NetworkRequestError(IllegalStateException("There was an error parsing response")))
             } catch (exception: IOException) {
-                Either.Left(Failure.ServerError(IllegalStateException("Error talking to the server for the request ${call.request().url()}")))
+                Either.Left(Failure.ServerError(IllegalStateException("Error talking to the server for the request ${call.request().url}")))
             } catch (exception: RuntimeException) {
-                Either.Left(Failure.NetworkRequestError(IllegalStateException("Error while performing the request ${call.request().url()}")))
+                Either.Left(Failure.NetworkRequestError(IllegalStateException("Error while performing the request ${call.request().url}")))
             }
         }
 

@@ -57,6 +57,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         initViewStateObservers()
     }
 
+    override fun onDestroyView() {
+        userName = null
+        userBio = null
+        userEmail = null
+        userLocation = null
+        userWeb = null
+        repositoryCount = null
+        followersCount = null
+        twitterUserName = null
+        super.onDestroyView()
+    }
+
     override fun onDestroy() {
         parentFragmentManager.removeFragmentOnAttachListener(insertUserDialogListener)
         super.onDestroy()

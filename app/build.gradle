@@ -19,6 +19,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions "backendData"
+    productFlavors {
+        mocked {
+            dimension "backendData"
+            applicationIdSuffix ".mock"
+            versionNameSuffix "-mock"
+        }
+
+        production {
+            dimension "backendData"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -31,6 +44,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    aaptOptions {
+        noCompress "json"
+    }
+
+    sourceSets {
+        // We store json files with mock data in this path
+        main.assets.srcDirs += ["${rootDir}/app/src/androidTest/assets/"]
     }
 }
 
@@ -51,6 +73,7 @@ dependencies {
     //region Retrofit
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.retrofitLoggingInterceptorVersion"
     //endregion
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutinesVersion"
