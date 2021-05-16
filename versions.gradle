@@ -1,6 +1,6 @@
 def _versions = [
-        kotlinVersion               : '1.4.20',
-        gradleVersion               : '4.1.1',
+        kotlinVersion               : '1.5.0',
+        gradleVersion               : '4.2.1',
         compileSdkVersion           : 30,
         targetSdkVersion            : 30,
         minSdkVersion               : 23,
