@@ -45,6 +45,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    aaptOptions {
+        noCompress "json"
+    }
+
+    sourceSets {
+        // We store json files with mock data in this path
+        main.assets.srcDirs += ["${rootDir}/app/src/androidTest/assets/"]
+    }
 }
 
 dependencies {

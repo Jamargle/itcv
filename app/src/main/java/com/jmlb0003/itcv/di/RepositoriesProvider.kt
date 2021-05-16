@@ -10,8 +10,11 @@ import com.jmlb0003.itcv.data.repositories.mappers.ReposMappers
 import com.jmlb0003.itcv.data.repositories.mappers.SearchResultsMappers
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers
 import com.jmlb0003.itcv.utils.ApiServiceGenerator
+import com.jmlb0003.itcv.utils.GsonUtils
 
-class RepositoriesProvider(private val mainInjector: MainInjector) {
+class RepositoriesProvider(
+    private val mainInjector: MainInjector
+) {
 
     val userRepository by lazy {
         UserRepository(
@@ -24,20 +27,38 @@ class RepositoriesProvider(private val mainInjector: MainInjector) {
     val repositoriesRepository by lazy { ReposRepository(repoService, ReposMappers) }
 
     private val networkHandler get() = mainInjector.networkHandler
-    private val gson by lazy { ApiServiceGenerator.gson }
+
+    private val gsonUtils = GsonUtils
+
+    private val okHttpInterceptorsProvider by lazy {
+        getInterceptorProvider(mainInjector)
+    }
+
+    private val okHttpClientProvider by lazy {
+        OkHttpClientProvider(
+            okHttpInterceptorsProvider.getInterceptors()
+        )
+    }
+
+    private val apiServiceGenerator by lazy {
+        ApiServiceGenerator(
+            okHttpClientProvider,
+            gsonUtils
+        )
+    }
 
     // region Services instantiation
     private val userService by lazy {
         UserService(
             userApiClient,
-            gson,
+            gsonUtils.gson,
             networkHandler
         )
     }
     private val repoService by lazy {
         RepoService(
             repoApiClient,
-            gson,
+            gsonUtils.gson,
             networkHandler
         )
     }
@@ -45,12 +66,12 @@ class RepositoriesProvider(private val mainInjector: MainInjector) {
 
     // region Api client instantiation
     private val userApiClient by lazy {
-        ApiServiceGenerator.createService(
+        apiServiceGenerator.createService(
             UserApiClient::class.java
         )
     }
     private val repoApiClient by lazy {
-        ApiServiceGenerator.createService(
+        apiServiceGenerator.createService(
             RepositoryApiClient::class.java
         )
     }

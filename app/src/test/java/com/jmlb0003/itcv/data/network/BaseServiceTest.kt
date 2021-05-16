@@ -94,6 +94,7 @@ class BaseServiceTest {
         every { response.isSuccessful } returns false
         val errorBody = mockk<ResponseBody>()
         every { response.errorBody() } returns errorBody
+        every { errorBody.close() } returns Unit
         val reader = mockk<Reader>()
         every { errorBody.charStream() } returns reader
         val errorResponse = mockk<ResponseFailure>()
