@@ -1,7 +1,6 @@
 package com.jmlb0003.itcv.di
 
 import android.content.Context
-import java.io.InputStream
 
 class ResponseFileReader(
     private val appContext: Context
