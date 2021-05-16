@@ -57,6 +57,20 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         viewModel.presenter.onViewReady(getProfileDetailsArguments())
     }
 
+    override fun onDestroyView() {
+        userName = null
+        memberSince = null
+        userBio = null
+        userEmail = null
+        userLocation = null
+        userWeb = null
+        followersCount = null
+        twitterUserName = null
+        loadingView = null
+        repositoryList = null
+        super.onDestroyView()
+    }
+
     private fun initToolbar() {
         activityViewModels<MainToolbarController>().value.setNewTitle(
             getString(
