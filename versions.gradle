@@ -1,6 +1,6 @@
 def _versions = [
-        kotlinVersion               : '1.4.20',
-        gradleVersion               : '4.1.1',
+        kotlinVersion               : '1.5.0',
+        gradleVersion               : '4.2.1',
         compileSdkVersion           : 30,
         targetSdkVersion            : 30,
         minSdkVersion               : 23,
@@ -23,11 +23,12 @@ def _versions = [
         coroutinesVersion           : '1.3.9',
 
         retrofitVersion             : '2.9.0',
+        retrofitLoggingInterceptorVersion : '4.9.1',
         canaryLeakVersion           : '2.4',
 
         //Testing
         androidXJunitVersion        : '1.1.2',
-        mockkVersion                : '1.10.0',
+        mockkVersion                : '1.11.0',
         testVersion                 : '1.3.0',
         espressoCoreVersion         : '3.3.0'
 ]
