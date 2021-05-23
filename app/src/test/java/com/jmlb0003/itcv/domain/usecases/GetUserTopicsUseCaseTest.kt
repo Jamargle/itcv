@@ -84,7 +84,7 @@ class GetUserTopicsUseCaseTest {
                 params = GetUserTopicsUseCase.Input(username)
             ) {
                 with((it as Either.Right).rightValue) {
-                    assertEquals(7, size)
+                    assertEquals(9, size)
                     assertEquals("A", get(0).name)
                     assertEquals("B", get(1).name)
                     assertEquals("C", get(2).name)
@@ -92,6 +92,8 @@ class GetUserTopicsUseCaseTest {
                     assertEquals("D", get(4).name)
                     assertEquals("E", get(5).name)
                     assertEquals("a", get(6).name)
+                    assertEquals("B", get(7).name)
+                    assertEquals("C", get(8).name)
                 }
             }
         }

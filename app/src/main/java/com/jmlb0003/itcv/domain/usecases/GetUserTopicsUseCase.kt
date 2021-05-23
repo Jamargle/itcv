@@ -31,7 +31,7 @@ class GetUserTopicsUseCase(
 
             allTopics.addAll(repoTopics)
         }
-        return allTopics.distinct()
+        return allTopics
     }
 
     data class Input(

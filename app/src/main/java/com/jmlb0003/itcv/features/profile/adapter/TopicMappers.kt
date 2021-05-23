@@ -2,10 +2,12 @@ package com.jmlb0003.itcv.features.profile.adapter
 
 import com.jmlb0003.itcv.domain.model.Topic
 
-object TopicMappers {
+class TopicMappers(
+    private val topicNormalizer: TopicNormalizer
+) {
     fun mapToPresentationItems(topics: List<Topic>) =
-        with(topics) {
-            map { mapToPresentationItem(it) }
+        topicNormalizer.getTopicNamesSortedByCount(topics).map {
+            mapToPresentationItem(Topic(it.first))
         }
 
     fun mapToPresentationItem(topic: Topic) =

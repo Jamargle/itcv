@@ -7,6 +7,7 @@ import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
 import com.jmlb0003.itcv.domain.usecases.GetUserTopicsUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.adapter.TopicMappers
+import com.jmlb0003.itcv.features.profile.adapter.TopicNormalizer
 
 class ProfileDetailsInjector(
     navigationTriggers: NavigationTriggers,
@@ -37,11 +38,12 @@ fun getProfileDetailsInjector(scope: ProfileDetailsFragment) =
             mainInjector.repositoriesProvider.repositoriesRepository,
             mainInjector.repositoriesProvider.topicsRepository,
         )
+        val topicMappers = TopicMappers(TopicNormalizer)
         ProfileDetailsInjector(
             navigationTriggers,
             getProfileDetailsUseCase,
             getUserTopicsUseCase,
-            TopicMappers,
+            topicMappers,
             mainInjector.dispatchers
         )
     }
