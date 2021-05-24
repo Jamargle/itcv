@@ -31,7 +31,7 @@
     <string name="profile_details_title_profile_details">Profile Details</string>
     <string name="profile_details_location">Location: %s</string>
     <string name="profile_details_followers_count">%s followers</string>
-    <string name="profile_details_topics_list_title">Topics</string>
+    <string name="profile_details_topics_list_title">Skills</string>
     <string name="profile_details_repository_name_content_description">Repository %s</string>
     <string name="profile_details_repository_list_title">Repositories</string>
     <string name="no_watchers">No watchers</string>
