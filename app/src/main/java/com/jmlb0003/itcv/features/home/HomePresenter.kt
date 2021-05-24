@@ -24,6 +24,10 @@ class HomePresenter(
 
     private var currentUser: User? = null
 
+    fun onViewCreated() {
+        currentUser?.let { mainToolbarController.setNewTitle(it.username) }
+    }
+
     fun onDefaultUsernameChange() {
         getDefaultUserProfile()
     }

@@ -64,6 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViews(view)
         initViewStateObservers()
+        viewModel.presenter.onViewCreated()
     }
 
     override fun onDestroyView() {

@@ -232,6 +232,27 @@ class HomePresenterTest {
     }
 
     @Test
+    fun `on onViewCreated displays the username of the current user if it is not null`() {
+        val userName = "Some user name"
+        val user = getFakeUser().copy(username = userName)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
+        val presenter = createHomePresenter()
+        presenter.onViewCreated()
+        verify { toolbarController.setNewTitle(userName) }
+    }
+
+    @Test
+    fun `on onViewCreated does nothing with toolbar controller if the current user is null`() {
+        every { usersRepository.getDefaultUser() } returns Either.Left(Failure.NetworkConnection)
+        val presenter = createHomePresenter()
+        presenter.onViewCreated()
+        verify(exactly = 0) {
+            toolbarController.setNewTitle(any<String>())
+            toolbarController.setNewTitle(any<Int>())
+        }
+    }
+
+    @Test
     fun `on onDefaultUsernameChange displays loading while fetching profile info`() {
         val presenter = createHomePresenter()
         presenter.onDefaultUsernameChange()
