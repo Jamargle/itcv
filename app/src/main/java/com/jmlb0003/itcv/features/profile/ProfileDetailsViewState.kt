@@ -2,10 +2,12 @@ package com.jmlb0003.itcv.features.profile
 
 import androidx.lifecycle.MutableLiveData
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
+import com.jmlb0003.itcv.features.profile.adapter.TopicListItem
 
 class ProfileDetailsViewState {
 
     val profileRepositories: MutableLiveData<RepositoriesStateList> = MutableLiveData()
+    val profileTopics: MutableLiveData<TopicsStateList> = MutableLiveData()
     val profileNameState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val profileBioState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val memberSinceState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
@@ -25,6 +27,10 @@ class ProfileDetailsViewState {
     fun hideRepos() = profileRepositories.postValue(RepositoriesStateList.Hidden)
     fun displayReposInformation(repositories: List<RepoListItem>) =
         profileRepositories.postValue(RepositoriesStateList.Ready(repositories))
+
+    fun displayLoadingTopics() = profileTopics.postValue(TopicsStateList.Loading)
+    fun hideTopics() = profileTopics.postValue(TopicsStateList.Hidden)
+    fun displayTopics(topics: List<TopicListItem>) = profileTopics.postValue(TopicsStateList.Ready(topics))
 
     fun displayBio(bio: String) = profileBioState.postValue(ProfileDetailsStateList.Ready(bio))
     fun hideBio() = profileBioState.postValue(ProfileDetailsStateList.Hidden)

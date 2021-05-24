@@ -4,12 +4,17 @@ import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.coroutines.TestDispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.domain.model.Repo
+import com.jmlb0003.itcv.domain.model.Topic
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.repositories.ReposRepository
+import com.jmlb0003.itcv.domain.repositories.TopicsRepository
 import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
+import com.jmlb0003.itcv.domain.usecases.GetUserTopicsUseCase
 import com.jmlb0003.itcv.features.home.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
+import com.jmlb0003.itcv.features.profile.adapter.TopicListItem
+import com.jmlb0003.itcv.features.profile.adapter.TopicMappers
 import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
@@ -37,9 +42,18 @@ class ProfileDetailsPresenterTest {
     private val navigationTriggers = mockk<NavigationTriggers>(relaxed = true)
     private val userRepository = mockk<UserRepository>(relaxed = true)
     private val reposRepository = mockk<ReposRepository>(relaxed = true)
+    private val topicsRepository = mockk<TopicsRepository>(relaxed = true)
     private val getProfileDetailsUseCase = GetProfileDetailsUseCase(userRepository, reposRepository)
-    private val presenter =
-        ProfileDetailsPresenter(viewState, navigationTriggers, getProfileDetailsUseCase, dispatchers)
+    private val getUserTopicsUseCase = GetUserTopicsUseCase(reposRepository, topicsRepository)
+    private val topicsMapper = mockk<TopicMappers>(relaxed = true)
+    private val presenter = ProfileDetailsPresenter(
+        viewState,
+        navigationTriggers,
+        getProfileDetailsUseCase,
+        getUserTopicsUseCase,
+        topicsMapper,
+        dispatchers
+    )
 
     @Test
     fun `on onUserWebsiteClicked triggers opening the given website`() {
@@ -266,9 +280,66 @@ class ProfileDetailsPresenterTest {
             verify { viewState.hideRepos() }
         }
 
+    @Test
+    fun `on onViewReady displays loading for topics`() {
+        val args = ProfileDetailsArgs(user = null, userName = "")
+        every { userRepository.getUser(any()) } returns Either.Right(mockk(relaxed = true))
+        every { reposRepository.getUserRepositories(any()) } returns Either.Right(emptyList())
+        presenter.onViewReady(args)
+        verify { viewState.displayLoadingTopics() }
+    }
+
+    @Test
+    fun `on onViewReady hides loading and topics view when reposRepository returns error when fetching user repositories`() =
+        testDispatcher.runBlockingTest {
+            val userName = "Some username"
+            val args = ProfileDetailsArgs(userName = userName)
+            every { reposRepository.getUserRepositories(userName) } returns Either.Left(Failure.NetworkConnection)
+
+            presenter.onViewReady(args)
+
+            verify { viewState.hideTopics() }
+        }
+
+    @Test
+    fun `on onViewReady hides loading and topics view when reposRepository returns empty list when fetching user repositories`() =
+        testDispatcher.runBlockingTest {
+            val userName = "Some username"
+            val args = ProfileDetailsArgs(userName = userName)
+            val repositoryName = "Repo 1"
+            val repository = getFakeRepo().copy(name = repositoryName)
+            every { reposRepository.getUserRepositories(userName) } returns Either.Right(listOf(repository))
+            every { topicsRepository.getRepositoryTopics(repositoryName, userName) } returns Either.Right(emptyList())
+
+            presenter.onViewReady(args)
+
+            verify { viewState.hideTopics() }
+        }
+
+    @Test
+    fun `on onViewReady displays topics when topics repository returns topics successfully`() =
+        testDispatcher.runBlockingTest {
+            val userName = "Some username"
+            val args = ProfileDetailsArgs(userName = userName)
+            val repositoryName = "Repo 1"
+            val repository = getFakeRepo().copy(name = repositoryName)
+            every { reposRepository.getUserRepositories(userName) } returns Either.Right(listOf(repository))
+            val topic = Topic("")
+            val topics = listOf(topic)
+            every { topicsRepository.getRepositoryTopics(repositoryName, userName) } returns Either.Right(topics)
+            val presentationTopics = listOf<TopicListItem>(mockk())
+            every { topicsMapper.mapToPresentationItems(topics) } returns presentationTopics
+
+            presenter.onViewReady(args)
+
+            verify { viewState.displayTopics(presentationTopics) }
+        }
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        every { userRepository.getUser(any()) } returns Either.Right(mockk(relaxed = true))
+        every { reposRepository.getUserRepositories(any()) } returns Either.Right(emptyList())
     }
 
     @After
@@ -282,5 +353,16 @@ class ProfileDetailsPresenterTest {
             username = "",
             name = "",
             memberSince = Date()
+        )
+
+    private fun getFakeRepo() =
+        Repo(
+            name = "",
+            description = "",
+            website = "",
+            repoUrl = "",
+            starsCount = -1,
+            watchersCount = -1,
+            forksCount = -1
         )
 }

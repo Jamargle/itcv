@@ -10,10 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.MainToolbarController
 import com.jmlb0003.itcv.features.profile.adapter.ReposAdapter
+import com.jmlb0003.itcv.features.profile.adapter.TopicListItem
 import com.jmlb0003.itcv.utils.showErrorPopup
 
 class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
@@ -21,6 +24,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     // region view state observers
     private val onUserNameChange = Observer<ProfileDetailsStateList> { handleUserNameChange(it) }
     private val onMemberSinceChange = Observer<ProfileDetailsStateList> { handleMemberSinceChange(it) }
+    private val onTopicsChange = Observer<TopicsStateList> { handleTopicsChange(it) }
     private val onRepositoriesChange = Observer<RepositoriesStateList> { handleReposChange(it) }
     private val onUserBioChange = Observer<ProfileDetailsStateList> { handleUserBioChange(it) }
     private val onEmailChange = Observer<ProfileDetailsStateList> { handleEmailChange(it) }
@@ -40,6 +44,8 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     private var userWeb: TextView? = null
     private var followersCount: TextView? = null
     private var twitterUserName: TextView? = null
+    private var loadingTopicsView: ProgressBar? = null
+    private var topicList: ChipGroup? = null
     private var loadingView: ProgressBar? = null
     private var repositoryList: RecyclerView? = null
     // endregion
@@ -66,6 +72,8 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         userWeb = null
         followersCount = null
         twitterUserName = null
+        loadingTopicsView = null
+        topicList = null
         loadingView = null
         repositoryList = null
         super.onDestroyView()
@@ -89,6 +97,8 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         userWeb = rootView.findViewById(R.id.user_web)
         followersCount = rootView.findViewById(R.id.followers_count)
         twitterUserName = rootView.findViewById(R.id.twitter_username)
+        loadingTopicsView = rootView.findViewById(R.id.loading_topics_list_view)
+        topicList = rootView.findViewById(R.id.topics_list)
         loadingView = rootView.findViewById(R.id.loading_repository_list_view)
         repositoryList = rootView.findViewById(R.id.repository_list)
 
@@ -118,6 +128,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun initViewStateObservers() {
         with(viewModel.nonNullViewState) {
+            profileTopics.observe(viewLifecycleOwner, onTopicsChange)
             profileRepositories.observe(viewLifecycleOwner, onRepositoriesChange)
             profileNameState.observe(viewLifecycleOwner, onUserNameChange)
             profileBioState.observe(viewLifecycleOwner, onUserBioChange)
@@ -219,6 +230,49 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun hideRepositoriesView() {
         repositoryList?.visibility = View.GONE
+    }
+
+    private fun handleTopicsChange(state: TopicsStateList) {
+        when (state) {
+            TopicsStateList.Loading -> displayTopicsLoading()
+            is TopicsStateList.Ready -> displayTopics(state.topics)
+            TopicsStateList.Hidden -> hideTopicsView()
+        }
+        if (state != TopicsStateList.Loading) {
+            hideTopicsLoadingView()
+        }
+    }
+
+    private fun displayTopics(topics: List<TopicListItem>) {
+        topicList?.apply {
+            visibility = View.VISIBLE
+
+            if (childCount > 0) {
+                removeAllViews()
+            }
+            addTopics(topics)
+        }
+    }
+
+    private fun ChipGroup.addTopics(topics: List<TopicListItem>) {
+        topics.forEach { topic ->
+            val chip = Chip(requireContext())
+            chip.text = topic.name
+
+            addView(chip)
+        }
+    }
+
+    private fun displayTopicsLoading() {
+        loadingTopicsView?.visibility = View.VISIBLE
+    }
+
+    private fun hideTopicsLoadingView() {
+        loadingTopicsView?.visibility = View.GONE
+    }
+
+    private fun hideTopicsView() {
+        topicList?.visibility = View.GONE
     }
 
     companion object {

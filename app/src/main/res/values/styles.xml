@@ -5,4 +5,9 @@
         <item name="android:textAppearance">?attr/textAppearanceBody1</item>
     </style>
 
+    <style name="SkillChip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">?attr/colorSecondary</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
 </resources>

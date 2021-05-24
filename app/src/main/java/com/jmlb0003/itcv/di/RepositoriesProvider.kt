@@ -2,12 +2,16 @@ package com.jmlb0003.itcv.di
 
 import com.jmlb0003.itcv.data.network.repo.RepoService
 import com.jmlb0003.itcv.data.network.repo.RepositoryApiClient
+import com.jmlb0003.itcv.data.network.topic.TopicsApiClient
+import com.jmlb0003.itcv.data.network.topic.TopicsService
 import com.jmlb0003.itcv.data.network.user.UserApiClient
 import com.jmlb0003.itcv.data.network.user.UserService
 import com.jmlb0003.itcv.data.repositories.ReposRepository
+import com.jmlb0003.itcv.data.repositories.TopicsRepository
 import com.jmlb0003.itcv.data.repositories.UserRepository
 import com.jmlb0003.itcv.data.repositories.mappers.ReposMappers
 import com.jmlb0003.itcv.data.repositories.mappers.SearchResultsMappers
+import com.jmlb0003.itcv.data.repositories.mappers.TopicsMapper
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers
 import com.jmlb0003.itcv.utils.ApiServiceGenerator
 import com.jmlb0003.itcv.utils.GsonUtils
@@ -25,6 +29,7 @@ class RepositoriesProvider(
         )
     }
     val repositoriesRepository by lazy { ReposRepository(repoService, ReposMappers) }
+    val topicsRepository by lazy { TopicsRepository(topicsService, TopicsMapper) }
 
     private val networkHandler get() = mainInjector.networkHandler
 
@@ -62,6 +67,13 @@ class RepositoriesProvider(
             networkHandler
         )
     }
+    private val topicsService by lazy {
+        TopicsService(
+            topicsApiClient,
+            networkHandler,
+            gsonUtils.gson
+        )
+    }
     // endregion
 
     // region Api client instantiation
@@ -73,6 +85,11 @@ class RepositoriesProvider(
     private val repoApiClient by lazy {
         apiServiceGenerator.createService(
             RepositoryApiClient::class.java
+        )
+    }
+    private val topicsApiClient by lazy {
+        apiServiceGenerator.createService(
+            TopicsApiClient::class.java
         )
     }
     // endregion
