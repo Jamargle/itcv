@@ -1,7 +1,8 @@
 <resources>
 
     <!--  Home screen  -->
-    <dimen name="home_avatar_image_size">100dp</dimen>
+    <dimen name="home_avatar_image_width">100dp</dimen>
+    <dimen name="home_avatar_image_height">200dp</dimen>
 
     <!--  Default user chooser  -->
     <dimen name="default_user_chooser_min_width">300dp</dimen>

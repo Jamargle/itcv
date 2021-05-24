@@ -21,7 +21,6 @@ class SearchResultsMappersTest {
 
         with(result) {
             assertEquals(expectedUsername, title)
-            assertEquals(expectedAvatarUrl, imageUrl)
         }
     }
 

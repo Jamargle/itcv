@@ -8,11 +8,10 @@
 
     <ImageView
         android:id="@+id/github_avatar"
-        android:layout_width="@dimen/home_avatar_image_size"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/home_avatar_image_width"
+        android:layout_height="@dimen/home_avatar_image_height"
         android:layout_margin="@dimen/margin_default"
         android:contentDescription="@string/home_github_avatar_content_description"
-        android:scaleType="centerCrop"
         android:src="@drawable/ic_avatar_placeholder"
         android:textAppearance="?attr/textAppearanceHeadline5"
         app:layout_constraintBottom_toTopOf="@id/github_avatar_horizontal_barrier"
@@ -20,6 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
+
+    <ProgressBar
+        android:id="@+id/avatar_loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/github_avatar"
+        app:layout_constraintEnd_toEndOf="@id/github_avatar"
+        app:layout_constraintStart_toStartOf="@id/github_avatar"
+        app:layout_constraintTop_toTopOf="@id/github_avatar"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/github_avatar_vertical_barrier"

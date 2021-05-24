@@ -6,6 +6,7 @@ import java.util.Date
 
 @Parcelize
 data class User(
+    val avatarUrl: String,
     val username: String,
     val name: String,
     val bio: String = "",

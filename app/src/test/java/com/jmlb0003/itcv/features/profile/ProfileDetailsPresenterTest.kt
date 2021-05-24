@@ -350,6 +350,7 @@ class ProfileDetailsPresenterTest {
 
     private fun getFakeUser() =
         User(
+            avatarUrl = "",
             username = "",
             name = "",
             memberSince = Date()

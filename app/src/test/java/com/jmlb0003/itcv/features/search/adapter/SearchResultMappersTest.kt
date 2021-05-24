@@ -11,16 +11,12 @@ class SearchResultMappersTest {
     @Test
     fun `on mapToSearchResultListItem converts given domain results to list of presentation results`() {
         val title1 = "Title 1"
-        val image1 = "Image 1"
         val result1 = SearchResult(
-            title = title1,
-            imageUrl = image1
+            title = title1
         )
         val title2 = "Title 2"
-        val image2 = "Image 2"
         val result2 = SearchResult(
-            title = title2,
-            imageUrl = image2
+            title = title2
         )
 
         val presentationResults = mapper.mapToSearchResultListItem(listOf(result1, result2))

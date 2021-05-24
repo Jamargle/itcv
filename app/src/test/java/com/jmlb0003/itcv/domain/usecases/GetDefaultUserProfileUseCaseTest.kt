@@ -69,6 +69,7 @@ class GetDefaultUserProfileUseCaseTest {
     }
 
     private fun getFakeUser() = User(
+        avatarUrl = "",
         username = "",
         name = "",
         memberSince = Date(),

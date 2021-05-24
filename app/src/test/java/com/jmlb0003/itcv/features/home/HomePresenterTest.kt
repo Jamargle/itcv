@@ -56,6 +56,26 @@ class HomePresenterTest {
     }
 
     @Test
+    fun `on init fetches profile info and if success then displays the user avatar if not empty`() {
+        val avatarUrl = "Some url"
+        val user = getFakeUser().copy(avatarUrl = avatarUrl)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
+        createHomePresenter()
+
+        verify { viewState.displayProfileAvatar(avatarUrl) }
+    }
+
+    @Test
+    fun `on init fetches profile info and if success then does not display the user avatar if empty`() {
+        val avatarUrl = ""
+        val user = getFakeUser().copy(avatarUrl = avatarUrl)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
+        createHomePresenter()
+
+        verify(exactly = 0) { viewState.displayProfileAvatar(avatarUrl) }
+    }
+
+    @Test
     fun `on init fetches profile info and if success then updates the title with the user name`() {
         val userName = "Some user name"
         val user = getFakeUser().copy(username = userName)
@@ -243,6 +263,28 @@ class HomePresenterTest {
         presenter.onDefaultUsernameChange()
 
         verify { toolbarController.setNewTitle(userName) }
+    }
+
+    @Test
+    fun `on onDefaultUsernameChange fetches profile info and if success then displays the user avatar if not empty`() {
+        val avatarUrl = "Some url"
+        val user = getFakeUser().copy(avatarUrl = avatarUrl)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
+        val presenter = createHomePresenter()
+        presenter.onDefaultUsernameChange()
+
+        verify { viewState.displayProfileAvatar(avatarUrl) }
+    }
+
+    @Test
+    fun `on onDefaultUsernameChange fetches profile info and if success then does not display the user avatar if empty`() {
+        val avatarUrl = ""
+        val user = getFakeUser().copy(avatarUrl = avatarUrl)
+        every { usersRepository.getDefaultUser() } returns Either.Right(user)
+        val presenter = createHomePresenter()
+        presenter.onDefaultUsernameChange()
+
+        verify(exactly = 0) { viewState.displayProfileAvatar(avatarUrl) }
     }
 
     @Test
@@ -448,7 +490,7 @@ class HomePresenterTest {
     private fun createHomePresenter() =
         HomePresenter(viewState, toolbarController, navigationTriggers, getUserProfileUseCase, dispatchers)
 
-    private fun getFakeUser() = User(username = "", name = "", memberSince = Date())
+    private fun getFakeUser() = User(avatarUrl = "", username = "", name = "", memberSince = Date())
 
     @Before
     fun setup() {

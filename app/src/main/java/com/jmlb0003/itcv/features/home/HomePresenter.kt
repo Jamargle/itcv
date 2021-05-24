@@ -66,6 +66,9 @@ class HomePresenter(
     }
 
     private fun displayUserInformation(user: User) {
+        if (user.avatarUrl.isNotEmpty()) {
+            viewState.displayProfileAvatar(user.avatarUrl)
+        }
         viewState.displayProfileName(user.name)
         if (user.bio.isNotEmpty()) {
             viewState.displayBio(user.bio)

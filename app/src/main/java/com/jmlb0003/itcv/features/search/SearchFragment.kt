@@ -69,7 +69,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             hideEmptyView()
         }
         if (state !is SearchViewStateList.ListOfResults) {
-            adapter?.setSearchResults(emptyList())
+            displayResults(emptyList())
         }
         if (state != SearchViewStateList.Error) {
             hideErrorView()
