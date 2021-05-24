@@ -24,6 +24,7 @@ def _versions = [
 
         retrofitVersion             : '2.9.0',
         retrofitLoggingInterceptorVersion : '4.9.1',
+        glideVersion                : '4.12.0',
         canaryLeakVersion           : '2.4',
 
         //Testing
