@@ -1,7 +1,9 @@
 package com.jmlb0003.itcv.features.home
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -10,9 +12,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.core.imageloader.GlideApp
 import com.jmlb0003.itcv.features.input.InsertUserDialog
 import com.jmlb0003.itcv.utils.showErrorPopup
 
@@ -28,6 +35,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
     }
+    private val onUserAvatarChange = Observer<HomeViewStateList> { handleUserAvatarChange(it) }
     private val onUserNameChange = Observer<HomeViewStateList> { handleUserNameChange(it) }
     private val onUserBioChange = Observer<HomeViewStateList> { handleUserBioChange(it) }
     private val onEmailChange = Observer<HomeViewStateList> { handleEmailChange(it) }
@@ -40,6 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     // endregion
 
     // region view fields
+    private var userAvatar: ImageView? = null
     private var userName: TextView? = null
     private var userBio: TextView? = null
     private var userEmail: TextView? = null
@@ -55,9 +64,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViews(view)
         initViewStateObservers()
+        viewModel.presenter.onViewCreated()
     }
 
     override fun onDestroyView() {
+        userAvatar = null
         userName = null
         userBio = null
         userEmail = null
@@ -76,6 +87,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun initViews(rootView: View) {
         with(rootView) {
+            userAvatar = findViewById(R.id.github_avatar)
             userName = findViewById(R.id.user_name)
             userBio = findViewById(R.id.user_bio)
             userEmail = findViewById(R.id.user_email)
@@ -122,6 +134,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun initViewStateObservers() {
         with(viewModel.nonNullViewState) {
             loadingState.observe(viewLifecycleOwner, onLoadingStateChange)
+            profileAvatarState.observe(viewLifecycleOwner, onUserAvatarChange)
             profileNameState.observe(viewLifecycleOwner, onUserNameChange)
             profileBioState.observe(viewLifecycleOwner, onUserBioChange)
             emailState.observe(viewLifecycleOwner, onEmailChange)
@@ -158,6 +171,43 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             errorMessage = errorMessage,
             onNegativeButtonClicked = { /* NO-OP */ }
         )
+    }
+
+    private fun handleUserAvatarChange(state: HomeViewStateList) {
+        with(userAvatar) {
+            if (this == null || state !is HomeViewStateList.Ready) {
+                return
+            }
+            findViewById<View>(R.id.avatar_loading_view)?.visibility = View.VISIBLE
+            GlideApp.with(requireContext())
+                .load(state.label)
+                .placeholder(R.drawable.ic_avatar_placeholder)
+                .addListener(
+                    object : RequestListener<Drawable?> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable?>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            findViewById<View>(R.id.avatar_loading_view)?.visibility = View.GONE
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable?>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            findViewById<View>(R.id.avatar_loading_view)?.visibility = View.GONE
+                            return false
+                        }
+                    }
+                )
+                .into(this)
+        }
     }
 
     private fun handleUserNameChange(state: HomeViewStateList) {

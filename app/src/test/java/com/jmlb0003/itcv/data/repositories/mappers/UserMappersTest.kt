@@ -10,6 +10,7 @@ class UserMappersTest {
 
     @Test
     fun `mapToDomain converts a user response to a domain model user`() {
+        val expectedAvatarUrl = "some avatar url"
         val expectedUsername = "some username"
         val expectedName = "some name"
         val expectedEmail = "some email"
@@ -18,6 +19,7 @@ class UserMappersTest {
         val expectedFollowerCount = 137
         val expectedDate = Date(4560000000)
         val userResponse = getFakeUserResponse().copy(
+            avatar = expectedAvatarUrl,
             username = expectedUsername,
             name = expectedName,
             email = expectedEmail,
@@ -30,6 +32,7 @@ class UserMappersTest {
         val result = mapToDomain(userResponse)
 
         with(result) {
+            assertEquals(expectedAvatarUrl, avatarUrl)
             assertEquals(expectedUsername, username)
             assertEquals(expectedName, name)
             assertEquals(expectedEmail, email)
@@ -86,6 +89,7 @@ class UserMappersTest {
 
     private fun getFakeUserResponse() =
         UserResponse(
+            avatar = "zzz",
             username = "zzz",
             name = "zzz",
             bioDescription = "bbb",

@@ -1,6 +1,6 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="@dimen/home_avatar_image_size"
-    android:height="@dimen/home_avatar_image_size"
+    android:width="@dimen/home_avatar_image_width"
+    android:height="@dimen/home_avatar_image_width"
     android:tint="?attr/colorControlNormal"
     android:viewportWidth="24"
     android:viewportHeight="24">

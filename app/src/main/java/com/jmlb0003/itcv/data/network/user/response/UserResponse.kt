@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class UserResponse(
+    @SerializedName("avatar_url") val avatar: String,
     @SerializedName("login") val username: String,
     @SerializedName("name") val name: String?,
     @SerializedName("bio") val bioDescription: String?,

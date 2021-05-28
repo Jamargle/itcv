@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.di
 
+import com.jmlb0003.itcv.core.SharedPreferencesHandler
 import com.jmlb0003.itcv.data.network.repo.RepoService
 import com.jmlb0003.itcv.data.network.repo.RepositoryApiClient
 import com.jmlb0003.itcv.data.network.topic.TopicsApiClient
@@ -17,12 +18,13 @@ import com.jmlb0003.itcv.utils.ApiServiceGenerator
 import com.jmlb0003.itcv.utils.GsonUtils
 
 class RepositoriesProvider(
-    private val mainInjector: MainInjector
+    private val networkInjector: NetworkInjector,
+    private val sharedPreferencesHandler: SharedPreferencesHandler
 ) {
 
     val userRepository by lazy {
         UserRepository(
-            mainInjector.sharedPreferencesHandler,
+            sharedPreferencesHandler,
             userService,
             UserMappers,
             SearchResultsMappers
@@ -31,23 +33,13 @@ class RepositoriesProvider(
     val repositoriesRepository by lazy { ReposRepository(repoService, ReposMappers) }
     val topicsRepository by lazy { TopicsRepository(topicsService, TopicsMapper) }
 
-    private val networkHandler get() = mainInjector.networkHandler
+    private val networkHandler get() = networkInjector.networkHandler
 
     private val gsonUtils = GsonUtils
 
-    private val okHttpInterceptorsProvider by lazy {
-        getInterceptorProvider(mainInjector)
-    }
-
-    private val okHttpClientProvider by lazy {
-        OkHttpClientProvider(
-            okHttpInterceptorsProvider.getInterceptors()
-        )
-    }
-
     private val apiServiceGenerator by lazy {
         ApiServiceGenerator(
-            okHttpClientProvider,
+            networkInjector.httpClientProvider,
             gsonUtils
         )
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 class HomeViewState {
 
     val loadingState: MutableLiveData<Boolean> = MutableLiveData(true)
+    val profileAvatarState: MutableLiveData<HomeViewStateList> = MutableLiveData()
     val profileNameState: MutableLiveData<HomeViewStateList> = MutableLiveData()
     val profileBioState: MutableLiveData<HomeViewStateList> = MutableLiveData()
     val emailState: MutableLiveData<HomeViewStateList> = MutableLiveData()
@@ -25,6 +26,8 @@ class HomeViewState {
 
     fun displayErrorMessage(@StringRes errorStringResource: Int) =
         errorState.postValue(HomeViewErrorState.ErrorStringRes(errorStringResource))
+
+    fun displayProfileAvatar(avatarUrl: String) = profileAvatarState.postValue(HomeViewStateList.Ready(avatarUrl))
 
     fun displayProfileName(profileName: String) = profileNameState.postValue(HomeViewStateList.Ready(profileName))
 

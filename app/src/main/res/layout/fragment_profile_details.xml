@@ -12,11 +12,10 @@
 
         <ImageView
             android:id="@+id/github_avatar"
-            android:layout_width="@dimen/home_avatar_image_size"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/home_avatar_image_width"
+            android:layout_height="@dimen/home_avatar_image_height"
             android:layout_margin="@dimen/margin_default"
             android:contentDescription="@string/home_github_avatar_content_description"
-            android:scaleType="centerCrop"
             android:src="@drawable/ic_avatar_placeholder"
             android:textAppearance="?attr/textAppearanceHeadline5"
             app:layout_constraintBottom_toTopOf="@id/member_since_group"
@@ -24,6 +23,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
+
+        <ProgressBar
+            android:id="@+id/loading_avatar_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_default"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/github_avatar"
+            app:layout_constraintEnd_toEndOf="@id/github_avatar"
+            app:layout_constraintStart_toStartOf="@id/github_avatar"
+            app:layout_constraintTop_toTopOf="@id/github_avatar"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/member_since_group"
@@ -72,6 +83,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/github_avatar_vertical_barrier"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Name of the user" />
 
@@ -138,7 +150,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="github_avatar" />
+            app:constraint_referenced_ids="github_avatar,member_since_group" />
 
         <TextView
             android:id="@+id/user_web"

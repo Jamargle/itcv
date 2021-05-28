@@ -41,21 +41,22 @@ class ProfileDetailsPresenter(
     }
 
     fun onViewReady(profileDetailsArguments: ProfileDetailsArgs) {
+        displayUserDetails(profileDetailsArguments.userName)
+        displayUserTopics(profileDetailsArguments.userName)
+        displayInformationIfAvailable(profileDetailsArguments.user)
+    }
+
+    // region profile details fetching and display
+    private fun displayUserDetails(userName: String) {
         viewState.displayLoadingRepos()
         getProfileDetailsUseCase(
             coroutineScope = this,
             dispatchers = dispatchers,
             params = GetProfileDetailsUseCase.Input(
-                username = profileDetailsArguments.userName
+                username = userName
             )
         ) {
             it.either(::handleGetDetailsError) { profileDetails -> handleGetDetailsSuccess(profileDetails) }
-        }
-
-        displayUserTopics(profileDetailsArguments.userName)
-
-        if (profileDetailsArguments.user != null) {
-            displayUserInformation(profileDetailsArguments.user)
         }
     }
 
@@ -68,7 +69,9 @@ class ProfileDetailsPresenter(
         viewState.hideRepos()
         viewState.displayErrorMessage(failure.message)
     }
+    // endregion
 
+    // region topics fetching and display
     private fun displayUserTopics(userName: String) {
         viewState.displayLoadingTopics()
         getUserTopicsUseCase(
@@ -92,8 +95,18 @@ class ProfileDetailsPresenter(
     private fun handleGetTopicsError(failure: Failure) {
         viewState.hideTopics()
     }
+    // endregion
+
+    private fun displayInformationIfAvailable(user: User?) {
+        if (user != null) {
+            displayUserInformation(user)
+        }
+    }
 
     private fun displayUserInformation(user: User) {
+        if (user.avatarUrl.isNotEmpty()) {
+            viewState.displayProfileAvatar(user.avatarUrl)
+        }
         viewState.displayProfileName(user.name)
         if (user.bio.isNotEmpty()) {
             viewState.displayBio(user.bio)

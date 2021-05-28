@@ -1,7 +1,9 @@
 package com.jmlb0003.itcv.features.profile
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
@@ -10,9 +12,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.core.imageloader.GlideApp
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.MainToolbarController
 import com.jmlb0003.itcv.features.profile.adapter.ReposAdapter
@@ -22,6 +29,7 @@ import com.jmlb0003.itcv.utils.showErrorPopup
 class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     // region view state observers
+    private val onUserAvatarChange = Observer<ProfileDetailsStateList> { handleUserAvatarChange(it) }
     private val onUserNameChange = Observer<ProfileDetailsStateList> { handleUserNameChange(it) }
     private val onMemberSinceChange = Observer<ProfileDetailsStateList> { handleMemberSinceChange(it) }
     private val onTopicsChange = Observer<TopicsStateList> { handleTopicsChange(it) }
@@ -36,6 +44,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     // endregion
 
     // region view fields
+    private var userAvatar: ImageView? = null
     private var userName: TextView? = null
     private var memberSince: TextView? = null
     private var userBio: TextView? = null
@@ -64,6 +73,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     }
 
     override fun onDestroyView() {
+        userAvatar = null
         userName = null
         memberSince = null
         userBio = null
@@ -89,6 +99,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     }
 
     private fun initViews(rootView: View) {
+        userAvatar = rootView.findViewById(R.id.github_avatar)
         userName = rootView.findViewById(R.id.user_name)
         memberSince = rootView.findViewById(R.id.member_since)
         userBio = rootView.findViewById(R.id.user_bio)
@@ -130,6 +141,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         with(viewModel.nonNullViewState) {
             profileTopics.observe(viewLifecycleOwner, onTopicsChange)
             profileRepositories.observe(viewLifecycleOwner, onRepositoriesChange)
+            profileAvatarState.observe(viewLifecycleOwner, onUserAvatarChange)
             profileNameState.observe(viewLifecycleOwner, onUserNameChange)
             profileBioState.observe(viewLifecycleOwner, onUserBioChange)
             memberSinceState.observe(viewLifecycleOwner, onMemberSinceChange)
@@ -144,6 +156,43 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun getProfileDetailsArguments() = arguments?.getParcelable<ProfileDetailsArgs>(ARG_PROFILE_DETAILS)
         ?: throw IllegalStateException("There needs to be a ProfileDetailsArgs input")
+
+    private fun handleUserAvatarChange(state: ProfileDetailsStateList) {
+        with(userAvatar) {
+            if (this == null || state !is ProfileDetailsStateList.Ready) {
+                return
+            }
+            findViewById<View>(R.id.avatar_loading_view)?.visibility = View.VISIBLE
+            GlideApp.with(requireContext())
+                .load(state.value)
+                .placeholder(R.drawable.ic_avatar_placeholder)
+                .addListener(
+                    object : RequestListener<Drawable?> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable?>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            findViewById<View>(R.id.avatar_loading_view)?.visibility = View.GONE
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable?>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            findViewById<View>(R.id.avatar_loading_view)?.visibility = View.GONE
+                            return false
+                        }
+                    }
+                )
+                .into(this)
+        }
+    }
 
     private fun handleUserNameChange(state: ProfileDetailsStateList) {
         userName.updateLabelViewState(state)

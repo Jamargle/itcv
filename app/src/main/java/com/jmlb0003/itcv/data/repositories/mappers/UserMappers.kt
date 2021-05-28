@@ -8,6 +8,7 @@ object UserMappers {
     fun mapToDomain(userResponse: UserResponse) =
         with(userResponse) {
             User(
+                avatarUrl = avatar,
                 username = username,
                 name = name ?: username,
                 bio = bioDescription ?: "",

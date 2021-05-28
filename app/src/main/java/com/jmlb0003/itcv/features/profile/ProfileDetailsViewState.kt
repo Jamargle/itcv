@@ -8,6 +8,7 @@ class ProfileDetailsViewState {
 
     val profileRepositories: MutableLiveData<RepositoriesStateList> = MutableLiveData()
     val profileTopics: MutableLiveData<TopicsStateList> = MutableLiveData()
+    val profileAvatarState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val profileNameState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val profileBioState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
     val memberSinceState: MutableLiveData<ProfileDetailsStateList> = MutableLiveData()
@@ -21,6 +22,7 @@ class ProfileDetailsViewState {
 
     fun displayErrorMessage(message: String?) = errorState.postValue(ProfileDetailsStateList.Error(message))
 
+    fun displayProfileAvatar(avatarUrl: String) = profileAvatarState.postValue(ProfileDetailsStateList.Ready(avatarUrl))
     fun displayProfileName(profileName: String) = profileNameState.postValue(ProfileDetailsStateList.Ready(profileName))
     fun displayMemberSince(memberSince: String) = memberSinceState.postValue(ProfileDetailsStateList.Ready(memberSince))
     fun displayLoadingRepos() = profileRepositories.postValue(RepositoriesStateList.Loading)

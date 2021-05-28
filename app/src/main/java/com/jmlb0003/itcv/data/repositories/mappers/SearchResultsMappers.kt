@@ -8,8 +8,7 @@ object SearchResultsMappers {
     fun mapToDomain(result: ApiSearchResult) =
         with(result) {
             SearchResult(
-                title = username,
-                imageUrl = avatarUrl
+                title = username
             )
         }
 }
