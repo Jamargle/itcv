@@ -181,6 +181,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             findViewById<View>(R.id.avatar_loading_view)?.visibility = View.VISIBLE
             GlideApp.with(requireContext())
                 .load(state.label)
+                .placeholder(R.drawable.ic_avatar_placeholder)
                 .addListener(
                     object : RequestListener<Drawable?> {
                         override fun onLoadFailed(

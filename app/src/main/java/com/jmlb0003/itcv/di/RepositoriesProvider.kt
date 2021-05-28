@@ -35,19 +35,9 @@ class RepositoriesProvider(
 
     private val gsonUtils = GsonUtils
 
-    private val okHttpInterceptorsProvider by lazy {
-        getInterceptorProvider(mainInjector)
-    }
-
-    private val okHttpClientProvider by lazy {
-        OkHttpClientProvider(
-            okHttpInterceptorsProvider.getInterceptors()
-        )
-    }
-
     private val apiServiceGenerator by lazy {
         ApiServiceGenerator(
-            okHttpClientProvider,
+            mainInjector.httpClientProvider,
             gsonUtils
         )
     }
