@@ -25,6 +25,7 @@ class HomePresenter(
     private var currentUser: User? = null
 
     fun onDefaultUsernameChange() {
+        viewState.resetErrorState()
         getDefaultUserProfile()
     }
 
