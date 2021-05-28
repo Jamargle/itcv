@@ -165,6 +165,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
             findViewById<View>(R.id.avatar_loading_view)?.visibility = View.VISIBLE
             GlideApp.with(requireContext())
                 .load(state.value)
+                .placeholder(R.drawable.ic_avatar_placeholder)
                 .addListener(
                     object : RequestListener<Drawable?> {
                         override fun onLoadFailed(
