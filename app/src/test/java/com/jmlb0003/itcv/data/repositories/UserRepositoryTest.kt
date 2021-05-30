@@ -4,6 +4,7 @@ import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.SharedPreferencesHandler
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.data.MissingDefaultUserNameFailure
+import com.jmlb0003.itcv.data.local.UserLocalDataSource
 import com.jmlb0003.itcv.data.network.user.UserService
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
 import com.jmlb0003.itcv.data.network.user.response.search.ResultItem
@@ -22,12 +23,19 @@ import org.junit.Test
 
 class UserRepositoryTest {
 
+    private val userLocalDataSource = mockk<UserLocalDataSource>(relaxed = true)
     private val userService = mockk<UserService>(relaxed = true)
     private val sharedPreferences = mockk<SharedPreferencesHandler>(relaxed = true)
     private val usersMapper = mockk<UserMappers>(relaxed = true)
     private val searchResultsMapper = mockk<SearchResultsMappers>(relaxed = true)
 
-    private val repository = UserRepository(sharedPreferences, userService, usersMapper, searchResultsMapper)
+    private val repository = UserRepository(
+        sharedPreferences,
+        userLocalDataSource,
+        userService,
+        usersMapper,
+        searchResultsMapper
+    )
 
     @Test
     fun `on updateDefaultUser sets given username as default and return Right result`() {
@@ -52,6 +60,7 @@ class UserRepositoryTest {
     fun `on getDefaultUser if sharedPreferences returns not empty then returns error if service returns error`() {
         val expectedUsername = "some user name"
         every { sharedPreferences.defaultUserName } returns expectedUsername
+        every { userLocalDataSource.getUser(expectedUsername) } returns Either.Left(mockk())
         val error = Failure.NetworkConnection
         every { userService.getUserProfile(expectedUsername) } returns Either.Left(error)
 
@@ -64,6 +73,7 @@ class UserRepositoryTest {
     fun `on getDefaultUser if sharedPreferences returns not empty then returns the user if service returns an user`() {
         val expectedUsername = "some user name"
         every { sharedPreferences.defaultUserName } returns expectedUsername
+        every { userLocalDataSource.getUser(expectedUsername) } returns Either.Left(mockk())
         val userResponse = mockk<UserResponse>()
         every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
         val expectedUser = mockk<User>()
@@ -76,6 +86,7 @@ class UserRepositoryTest {
 
     @Test
     fun `on getUser if service returns failure returns the error`() {
+        every { userLocalDataSource.getUser(any()) } returns Either.Left(mockk())
         val error = Failure.NetworkConnection
         every { userService.getUserProfile(any()) } returns Either.Left(error)
 
@@ -89,6 +100,7 @@ class UserRepositoryTest {
         val expectedUsername = "some user name"
         val userResponse = mockk<UserResponse>()
         val expectedUser = mockk<User>()
+        every { userLocalDataSource.getUser(expectedUsername) } returns Either.Left(mockk())
         every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
         every { usersMapper.mapToDomain(userResponse) } returns expectedUser
 

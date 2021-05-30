@@ -36,11 +36,11 @@ class UserRepository(
 
     override fun getUser(username: String): Either<Failure, User> =
         getStoredUser(username)?.let { cached ->
-            Either.Right(cached)
+            Either.Right(userMappers.mapToDomain(cached))
         } ?: fetchUser(username)
 
-    private fun getStoredUser(username: String): User? {
-        return when (val result = userLocalDataSource.getUser(username)) {
+    private fun getStoredUser(username: String) =
+        when (val result = userLocalDataSource.getUser(username)) {
             is Either.Left -> {
                 // Ignore the error and just return null
                 null
@@ -52,7 +52,6 @@ class UserRepository(
                 result.rightValue
             }
         }
-    }
 
     private fun fetchUser(username: String): Either<Failure, User> =
         when (val result = userService.getUserProfile(username)) {

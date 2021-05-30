@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.data.repositories.mappers
 
+import com.jmlb0003.itcv.data.model.User
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers.mapToDomain
 import org.junit.Assert.assertEquals
@@ -82,6 +83,47 @@ class UserMappersTest {
         val userResponse = getFakeUserResponse().copy(twitterAccount = null)
         val result = mapToDomain(userResponse)
         assertEquals("", result.twitterAccount)
+    }
+
+    @Test
+    fun `mapToDomain with data User converts it to a domain model object`() {
+        val expectedUsername = "some username"
+        val expectedName = "some name"
+        val expectedBio = "some bio description"
+        val expectedMemberSince = Date(4560000000)
+        val expectedEmail = "some email"
+        val expectedLocation = "some location"
+        val expectedRepositoryCount = 136
+        val expectedFollowerCount = 137
+        val expectedWebsite = "Some web site"
+        val expectedTwitterAccount = "Some twitter user account"
+        val dataUser = User(
+            userId = expectedUsername,
+            name = expectedName,
+            bio = expectedBio,
+            memberSince = expectedMemberSince,
+            email = expectedEmail,
+            location = expectedLocation,
+            repositoryCount = expectedRepositoryCount,
+            followerCount = expectedFollowerCount,
+            website = expectedWebsite,
+            twitterAccount = expectedTwitterAccount
+        )
+
+        val result = mapToDomain(dataUser)
+
+        with(result) {
+            assertEquals(expectedUsername, username)
+            assertEquals(expectedName, name)
+            assertEquals(expectedBio, bio)
+            assertEquals(expectedMemberSince, memberSince)
+            assertEquals(expectedEmail, email)
+            assertEquals(expectedLocation, location)
+            assertEquals(expectedRepositoryCount, repositoryCount)
+            assertEquals(expectedFollowerCount, followerCount)
+            assertEquals(expectedWebsite, website)
+            assertEquals(expectedTwitterAccount, twitterAccount)
+        }
     }
 
     private fun getFakeUserResponse() =

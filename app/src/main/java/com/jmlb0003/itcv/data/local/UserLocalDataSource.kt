@@ -2,7 +2,7 @@ package com.jmlb0003.itcv.data.local
 
 import com.jmlb0003.itcv.core.Either
 import com.jmlb0003.itcv.core.exception.Failure
-import com.jmlb0003.itcv.domain.model.User
+import com.jmlb0003.itcv.data.model.User
 
 class UserLocalDataSource(
 //    private val database: UserDatabase
