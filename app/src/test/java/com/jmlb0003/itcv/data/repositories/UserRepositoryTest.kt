@@ -20,6 +20,8 @@ import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.Calendar
+import java.util.Date
 import com.jmlb0003.itcv.data.model.User as DataUser
 
 class UserRepositoryTest {
@@ -86,12 +88,32 @@ class UserRepositoryTest {
     }
 
     @Test
+    fun `on getDefaultUser caches user if service returns an user`() {
+        val expectedUsername = "some user name"
+        every { sharedPreferences.defaultUserName } returns expectedUsername
+        every { userLocalDataSource.getUser(expectedUsername) } returns Either.Left(mockk())
+        val userResponse = mockk<UserResponse>()
+        every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
+        val expectedUser = mockk<User>()
+        every { usersMapper.mapToDomain(userResponse) } returns expectedUser
+        val expectedDataUser = mockk<DataUser>()
+        every { usersMapper.mapToData(expectedUser, any()) } returns expectedDataUser
+
+        val result = repository.getDefaultUser()
+
+        assertEquals(expectedUser, (result as Either.Right).rightValue)
+
+        verify { userLocalDataSource.saveUser(expectedDataUser) }
+    }
+
+    @Test
     fun `on getUser returns cached user if local source returns a valid cached user`() {
         val expectedUsername = "some user name"
         val expectedDataUser = mockk<DataUser>()
         val expectedUser = mockk<User>()
         every { userLocalDataSource.getUser(expectedUsername) } returns Either.Right(expectedDataUser)
         every { usersMapper.mapToDomain(expectedDataUser) } returns expectedUser
+        every { expectedDataUser.lastCacheUpdate } returns Date().time
 
         val result = repository.getUser(expectedUsername)
 
@@ -104,6 +126,8 @@ class UserRepositoryTest {
         val expectedUsername = "some user name"
         val expectedDataUser = mockk<DataUser>()
         every { userLocalDataSource.getUser(expectedUsername) } returns Either.Right(expectedDataUser)
+        every { expectedDataUser.lastCacheUpdate } returns
+                Calendar.getInstance().apply { add(Calendar.HOUR, -25) }.timeInMillis
         val otherPossibleUser = mockk<User>()
         every { usersMapper.mapToDomain(expectedDataUser) } returns otherPossibleUser
         val userResponse = mockk<UserResponse>()
@@ -115,6 +139,25 @@ class UserRepositoryTest {
 
         assertEquals(expectedUser, (result as Either.Right).rightValue)
         verify(exactly = 0) { usersMapper.mapToDomain(any<DataUser>()) }
+    }
+
+    @Test
+    fun `on getUser removes non valid cached user if exists`() {
+        val expectedUsername = "some user name"
+        val expectedDataUser = mockk<DataUser>()
+        every { userLocalDataSource.getUser(expectedUsername) } returns Either.Right(expectedDataUser)
+        every { expectedDataUser.lastCacheUpdate } returns
+                Calendar.getInstance().apply { add(Calendar.HOUR, -25) }.timeInMillis
+        val otherPossibleUser = mockk<User>()
+        every { usersMapper.mapToDomain(expectedDataUser) } returns otherPossibleUser
+        val userResponse = mockk<UserResponse>()
+        val expectedUser = mockk<User>()
+        every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
+        every { usersMapper.mapToDomain(userResponse) } returns expectedUser
+
+        repository.getUser(expectedUsername)
+
+        verify { userLocalDataSource.removeUser(expectedUsername) }
     }
 
     @Test
@@ -155,6 +198,24 @@ class UserRepositoryTest {
         val result = repository.getUser(expectedUsername)
 
         assertEquals(expectedUser, (result as Either.Right).rightValue)
+    }
+
+    @Test
+    fun `on getUser caches user if service returns an user`() {
+        val expectedUsername = "some user name"
+        every { userLocalDataSource.getUser(expectedUsername) } returns Either.Left(mockk())
+        val userResponse = mockk<UserResponse>()
+        every { userService.getUserProfile(expectedUsername) } returns Either.Right(userResponse)
+        val expectedUser = mockk<User>()
+        every { usersMapper.mapToDomain(userResponse) } returns expectedUser
+        val expectedDataUser = mockk<DataUser>()
+        every { usersMapper.mapToData(expectedUser, any()) } returns expectedDataUser
+
+        val result = repository.getUser(expectedUsername)
+
+        assertEquals(expectedUser, (result as Either.Right).rightValue)
+
+        verify { userLocalDataSource.saveUser(expectedDataUser) }
     }
 
     @Test

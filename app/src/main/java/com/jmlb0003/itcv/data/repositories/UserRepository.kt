@@ -10,6 +10,8 @@ import com.jmlb0003.itcv.data.repositories.mappers.SearchResultsMappers
 import com.jmlb0003.itcv.data.repositories.mappers.UserMappers
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.model.User
+import com.jmlb0003.itcv.utils.DateExtensions.isOlderThanYesterday
+import java.util.Date
 import com.jmlb0003.itcv.domain.repositories.UserRepository as UserRepositoryInterface
 
 class UserRepository(
@@ -37,7 +39,7 @@ class UserRepository(
     override fun getUser(username: String): Either<Failure, User> =
         getStoredUser(username)?.let { cached ->
             Either.Right(userMappers.mapToDomain(cached))
-        } ?: fetchUser(username)
+        } ?: fetchUser(username).also { cacheDefaultUser(it) }
 
     private fun getStoredUser(username: String) =
         when (val result = userLocalDataSource.getUser(username)) {
@@ -46,12 +48,27 @@ class UserRepository(
                 null
             }
             is Either.Right -> {
-//  TODO          if (result is not valid (older than 1 day)) {
-//                    null
-//                }
-                result.rightValue
+                if (result.rightValue.lastCacheUpdate.isOlderThanYesterday()) {
+                    userLocalDataSource.removeUser(username)
+                    null
+                } else {
+                    result.rightValue
+                }
             }
         }
+
+    private fun cacheDefaultUser(user: Either<Failure, User>) {
+        when (user) {
+            is Either.Right -> {
+                userLocalDataSource.saveUser(
+                    userMappers.mapToData(user.rightValue, Date())
+                )
+            }
+            else -> {
+                // NO-OP
+            }
+        }
+    }
 
     private fun fetchUser(username: String): Either<Failure, User> =
         when (val result = userService.getUserProfile(username)) {

@@ -1,6 +1,7 @@
 package com.jmlb0003.itcv.di
 
 import com.jmlb0003.itcv.data.local.UserLocalDataSource
+import com.jmlb0003.itcv.data.local.database.MyDataBase
 import com.jmlb0003.itcv.data.network.repo.RepoService
 import com.jmlb0003.itcv.data.network.repo.RepositoryApiClient
 import com.jmlb0003.itcv.data.network.topic.TopicsApiClient
@@ -33,7 +34,9 @@ class RepositoriesProvider(
     val repositoriesRepository by lazy { ReposRepository(repoService, ReposMappers) }
     val topicsRepository by lazy { TopicsRepository(topicsService, TopicsMapper) }
 
-    private val userLocalDataSource by lazy { UserLocalDataSource() }
+    private val userLocalDataSource by lazy {
+        UserLocalDataSource(MyDataBase.getInstance(mainInjector.applicationContext))
+    }
 
     private val networkHandler get() = mainInjector.networkHandler
 

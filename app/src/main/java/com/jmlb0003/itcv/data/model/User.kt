@@ -23,5 +23,6 @@ class User(
     val repositoryCount: Int,
     val followerCount: Int,
     val website: String,
-    val twitterAccount: String
+    val twitterAccount: String,
+    var lastCacheUpdate: Long
 )
