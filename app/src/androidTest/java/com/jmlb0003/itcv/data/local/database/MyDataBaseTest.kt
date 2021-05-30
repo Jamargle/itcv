@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.jmlb0003.itcv.data.model.User
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
@@ -32,7 +33,7 @@ class MyDataBaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeAndReadUsers() {
+    fun writeReadAndRemoveUsers() {
         val username1 = "User 1"
         val username1MemberSinceTime = 12345678900
         val userToInsert1 = getFakeUser(
@@ -48,6 +49,11 @@ class MyDataBaseTest {
         assertEquals(username1, userDao.getUser(username1)?.userId)
         assertEquals(username1MemberSinceTime, userDao.getUser(username1)?.memberSince?.time)
         assertEquals(username2, userDao.getUser(username2)?.userId)
+
+        userDao.getUser(username1)?.let { userDao.removeUser(it) }
+        assertNull(userDao.getUser(username1))
+        userDao.getUser(username2)?.let { userDao.removeUser(it) }
+        assertNull(userDao.getUser(username2))
     }
 
     private fun getFakeUser(
