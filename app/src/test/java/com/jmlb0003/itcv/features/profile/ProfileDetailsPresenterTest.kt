@@ -127,8 +127,14 @@ class ProfileDetailsPresenterTest {
             val expectedRepoDescription = "Repo description"
             val expectedWebUrl = "Repo website"
             val expectedRepoUrl = "Repo url"
-            val expectedRepository =
-                Repo(expectedRepoName, expectedRepoDescription, expectedWebUrl, expectedRepoUrl, -1, -1, -1)
+            val expectedRepoId = "123abc"
+            val expectedRepository = getFakeRepo().copy(
+                id = expectedRepoId,
+                name = expectedRepoName,
+                description = expectedRepoDescription,
+                website = expectedWebUrl,
+                repoUrl = expectedRepoUrl
+            )
             val expectedName = "Some name"
             val expectedBio = "Some biography"
             val expectedDate = Date(994560000000)
@@ -357,6 +363,7 @@ class ProfileDetailsPresenterTest {
 
     private fun getFakeRepo() =
         Repo(
+            id = "",
             name = "",
             description = "",
             website = "",

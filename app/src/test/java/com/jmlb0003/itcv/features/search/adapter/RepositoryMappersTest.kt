@@ -39,6 +39,7 @@ class RepositoryMappersTest {
 
     private fun getFakeRepo() =
         Repo(
+            id = "ddd",
             name = "nnn",
             description = "ddd",
             website = "www",

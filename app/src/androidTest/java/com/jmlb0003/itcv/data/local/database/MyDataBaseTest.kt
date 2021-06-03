@@ -2,6 +2,7 @@ package com.jmlb0003.itcv.data.local.database
 
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
+import com.jmlb0003.itcv.data.model.Repo
 import com.jmlb0003.itcv.data.model.User
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -14,6 +15,7 @@ import java.util.Date
 class MyDataBaseTest {
 
     private lateinit var userDao: UserDao
+    private lateinit var reposDao: ReposDao
     private lateinit var db: MyDataBase
 
     @Before
@@ -23,6 +25,7 @@ class MyDataBaseTest {
             MyDataBase::class.java
         ).build()
         userDao = db.userDao()
+        reposDao = db.reposDao()
     }
 
     @After
@@ -32,7 +35,6 @@ class MyDataBaseTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun writeReadAndRemoveUsers() {
         val username1 = "User 1"
         val username1MemberSinceTime = 12345678900
@@ -54,6 +56,35 @@ class MyDataBaseTest {
         assertNull(userDao.getUser(username1))
         userDao.getUser(username2)?.let { userDao.removeUser(it) }
         assertNull(userDao.getUser(username2))
+    }
+
+    @Test
+    fun writeReadAndRemoveRepos() {
+        val repoId = "Repo123abc"
+        val repoName = "Repo 123 abc"
+        val username = "User 1"
+        val lastUpdate = 123456789L
+        val reposToInsert = getFakeRepo(
+            expectedId = repoId,
+            expectedName = repoName,
+            expectedOwner = username,
+            expectedLastUpdate = lastUpdate
+        )
+
+        userDao.insertUser(getFakeUser(userId = username))
+
+        reposDao.insertRepos(listOf(reposToInsert))
+
+        val insertedRepo = reposDao.getReposByUser(username)[0]
+        with(insertedRepo) {
+            assertEquals(repoId, id)
+            assertEquals(repoName, name)
+            assertEquals(username, owner)
+            assertEquals(lastUpdate, lastCacheUpdate)
+        }
+
+        reposDao.getReposByUser(username).let { reposDao.removeRepos(it) }
+        assertEquals(emptyList<Repo>(), reposDao.getReposByUser(username))
     }
 
     private fun getFakeUser(
@@ -80,5 +111,29 @@ class MyDataBaseTest {
         website = website,
         twitterAccount = twitterAccount,
         lastCacheUpdate = lastCacheUpdate
+    )
+
+    private fun getFakeRepo(
+        expectedId: String = "",
+        expectedName: String = "",
+        expectedDescription: String = "",
+        expectedWebsiteUrl: String = "",
+        expectedRepoUrl: String = "",
+        expectedForkCount: Int = -1,
+        expectedStarsCount: Int = -1,
+        expectedWatchersCount: Int = -1,
+        expectedOwner: String = "",
+        expectedLastUpdate: Long = -1
+    ) = Repo(
+        id = expectedId,
+        name = expectedName,
+        description = expectedDescription,
+        website = expectedWebsiteUrl,
+        repoUrl = expectedRepoUrl,
+        forksCount = expectedForkCount,
+        starsCount = expectedStarsCount,
+        watchersCount = expectedWatchersCount,
+        owner = expectedOwner,
+        lastCacheUpdate = expectedLastUpdate
     )
 }

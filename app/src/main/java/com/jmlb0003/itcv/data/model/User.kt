@@ -14,7 +14,7 @@ internal const val USER_ID = "user_id"
 class User(
     @PrimaryKey
     @ColumnInfo(name = USER_ID)
-    val userId: String,
+    val userId: String, // TODO for testing database model upgrades: try adding actual user ID since the username can be changed by user
     val name: String,
     val bio: String,
     val memberSince: Date,

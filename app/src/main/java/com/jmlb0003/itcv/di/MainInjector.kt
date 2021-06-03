@@ -15,11 +15,11 @@ class MainInjector(
     private var provideSharedPreferencesHandler: () -> SharedPreferencesHandler
 ) {
 
-    val applicationContext get() = provideApplicationContext()
-    val networkHandler get() = provideNetworkHandler()
-    val dispatchers get() = provideDispatchers()
-    val repositoriesProvider get() = provideRepositoriesProvider()
-    val sharedPreferencesHandler get() = provideSharedPreferencesHandler()
+    val applicationContext by lazy { provideApplicationContext() }
+    val networkHandler by lazy { provideNetworkHandler() }
+    val dispatchers by lazy { provideDispatchers() }
+    val repositoriesProvider by lazy { provideRepositoriesProvider() }
+    val sharedPreferencesHandler by lazy { provideSharedPreferencesHandler() }
 }
 
 val FragmentActivity.mainInjector: MainInjector

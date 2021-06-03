@@ -112,6 +112,7 @@ class GetUserTopicsUseCaseTest {
     }
 
     private fun getFakeRepo() = Repo(
+        id = "",
         name = "",
         description = "",
         website = "",

@@ -30,7 +30,7 @@ class UserLocalDataSourceTest {
     }
 
     @Test
-    fun `on saveUser returns the user from database if found`() {
+    fun `on saveUser returns Unit from database if properly inserted`() {
         val expectedUser = mockk<User>()
         every { database.userDao().insertUser(expectedUser) } returns Unit
 

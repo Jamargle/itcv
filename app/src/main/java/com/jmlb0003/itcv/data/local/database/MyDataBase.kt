@@ -5,14 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.jmlb0003.itcv.data.model.Repo
 import com.jmlb0003.itcv.data.model.User
 
 private const val DATABASE_NAME = "itcv.db"
 internal const val USER_TABLE_NAME = "users"
+internal const val REPO_TABLE_NAME = "repos"
 
 @Database(
     entities = [
-        User::class
+        User::class,
+        Repo::class
     ],
     version = 1,
     exportSchema = false
@@ -21,6 +24,8 @@ internal const val USER_TABLE_NAME = "users"
 abstract class MyDataBase : RoomDatabase() {
 
     internal abstract fun userDao(): UserDao
+
+    internal abstract fun reposDao(): ReposDao
 
     companion object {
 
