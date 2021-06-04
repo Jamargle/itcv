@@ -51,32 +51,35 @@ class GetUserTopicsUseCaseTest {
 
             val username = "SomeUsername"
             val repo1 = "Repository1"
+            val repoId1 = "id_Repository1"
             val topics1 = listOf(
                 getFakeTopic().copy(name = "A"),
                 getFakeTopic().copy(name = "B"),
                 getFakeTopic().copy(name = "C"),
             )
             val repo2 = "Repository2"
+            val repoId2 = "id_Repository2"
             val topics2 = listOf(
                 getFakeTopic().copy(name = "c"), // it will be counted with 'C', but as different topic, it is in the list as well, but at the end
                 getFakeTopic().copy(name = "D"),
                 getFakeTopic().copy(name = "E"),
             )
             val repo3 = "Repository3"
+            val repoId3 = "id_Repository3"
             val topics3 = listOf(
                 getFakeTopic().copy(name = "a"), // a will be counted as 'A' but it goes at the end of the list because it is considered as a different topic
                 getFakeTopic().copy(name = "B"),
                 getFakeTopic().copy(name = "C"),
             )
             val userRepositories = listOf(
-                getFakeRepo().copy(name = repo1),
-                getFakeRepo().copy(name = repo2),
-                getFakeRepo().copy(name = repo3)
+                getFakeRepo().copy(id = repoId1, name = repo1),
+                getFakeRepo().copy(id = repoId2, name = repo2),
+                getFakeRepo().copy(id = repoId3, name = repo3)
             )
             every { reposRepository.getUserRepositories(username) } returns Either.Right(userRepositories)
-            every { topicsRepository.getRepositoryTopics(repo1, username) } returns Either.Right(topics1)
-            every { topicsRepository.getRepositoryTopics(repo2, username) } returns Either.Right(topics2)
-            every { topicsRepository.getRepositoryTopics(repo3, username) } returns Either.Right(topics3)
+            every { topicsRepository.getRepositoryTopics(repoId1, repo1, username) } returns Either.Right(topics1)
+            every { topicsRepository.getRepositoryTopics(repoId2, repo2, username) } returns Either.Right(topics2)
+            every { topicsRepository.getRepositoryTopics(repoId3, repo3, username) } returns Either.Right(topics3)
 
             useCase(
                 coroutineScope = this,
@@ -102,7 +105,7 @@ class GetUserTopicsUseCaseTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         every { reposRepository.getUserRepositories(any()) } returns Either.Right(emptyList())
-        every { topicsRepository.getRepositoryTopics(any(), any()) } returns Either.Right(emptyList())
+        every { topicsRepository.getRepositoryTopics(any(), any(), any()) } returns Either.Right(emptyList())
     }
 
     @After
