@@ -29,6 +29,9 @@ def _versions = [
         // Room
         room                        : '2.3.0',
 
+        // Dagger 2
+        daggerVersion               : '2.36',
+
         //Testing
         androidXJunitVersion        : '1.1.2',
         mockkVersion                : '1.11.0',
