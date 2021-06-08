@@ -7,6 +7,7 @@ import com.jmlb0003.itcv.domain.model.Topic
 interface TopicsRepository {
 
     fun getRepositoryTopics(
+        repoId: String,
         repoName: String,
         repoOwnerUsername: String
     ): Either<Failure, List<Topic>>

@@ -24,7 +24,7 @@ class GetUserTopicsUseCase(
     private fun getAllTopics(reposOwner: String, repos: List<Repo>): List<Topic> {
         val allTopics = mutableListOf<Topic>()
         repos.forEach { repo ->
-            val repoTopics = when (val topics = topicsRepository.getRepositoryTopics(repo.name, reposOwner)) {
+            val repoTopics = when (val topics = topicsRepository.getRepositoryTopics(repo.id, repo.name, reposOwner)) {
                 is Either.Left -> emptyList()
                 is Either.Right -> topics.rightValue
             }

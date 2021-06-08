@@ -26,6 +26,9 @@ def _versions = [
         retrofitLoggingInterceptorVersion : '4.9.1',
         canaryLeakVersion           : '2.4',
 
+        // Room
+        room                        : '2.3.0',
+
         //Testing
         androidXJunitVersion        : '1.1.2',
         mockkVersion                : '1.11.0',

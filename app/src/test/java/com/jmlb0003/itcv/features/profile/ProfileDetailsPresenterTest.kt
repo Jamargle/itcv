@@ -127,8 +127,14 @@ class ProfileDetailsPresenterTest {
             val expectedRepoDescription = "Repo description"
             val expectedWebUrl = "Repo website"
             val expectedRepoUrl = "Repo url"
-            val expectedRepository =
-                Repo(expectedRepoName, expectedRepoDescription, expectedWebUrl, expectedRepoUrl, -1, -1, -1)
+            val expectedRepoId = "123abc"
+            val expectedRepository = getFakeRepo().copy(
+                id = expectedRepoId,
+                name = expectedRepoName,
+                description = expectedRepoDescription,
+                website = expectedWebUrl,
+                repoUrl = expectedRepoUrl
+            )
             val expectedName = "Some name"
             val expectedBio = "Some biography"
             val expectedDate = Date(994560000000)
@@ -306,10 +312,13 @@ class ProfileDetailsPresenterTest {
         testDispatcher.runBlockingTest {
             val userName = "Some username"
             val args = ProfileDetailsArgs(userName = userName)
+            val repositoryId = "Repo ID 1"
             val repositoryName = "Repo 1"
-            val repository = getFakeRepo().copy(name = repositoryName)
+            val repository = getFakeRepo().copy(id = repositoryId, name = repositoryName)
             every { reposRepository.getUserRepositories(userName) } returns Either.Right(listOf(repository))
-            every { topicsRepository.getRepositoryTopics(repositoryName, userName) } returns Either.Right(emptyList())
+            every { topicsRepository.getRepositoryTopics(repositoryId, repositoryName, userName) } returns Either.Right(
+                emptyList()
+            )
 
             presenter.onViewReady(args)
 
@@ -321,12 +330,15 @@ class ProfileDetailsPresenterTest {
         testDispatcher.runBlockingTest {
             val userName = "Some username"
             val args = ProfileDetailsArgs(userName = userName)
+            val repositoryId = "Repo ID 1"
             val repositoryName = "Repo 1"
-            val repository = getFakeRepo().copy(name = repositoryName)
+            val repository = getFakeRepo().copy(id = repositoryId, name = repositoryName)
             every { reposRepository.getUserRepositories(userName) } returns Either.Right(listOf(repository))
             val topic = Topic("")
             val topics = listOf(topic)
-            every { topicsRepository.getRepositoryTopics(repositoryName, userName) } returns Either.Right(topics)
+            every {
+                topicsRepository.getRepositoryTopics(repositoryId, repositoryName, userName)
+            } returns Either.Right(topics)
             val presentationTopics = listOf<TopicListItem>(mockk())
             every { topicsMapper.mapToPresentationItems(topics) } returns presentationTopics
 
@@ -357,6 +369,7 @@ class ProfileDetailsPresenterTest {
 
     private fun getFakeRepo() =
         Repo(
+            id = "",
             name = "",
             description = "",
             website = "",

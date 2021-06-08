@@ -212,6 +212,13 @@ class HomePresenterTest {
     }
 
     @Test
+    fun `on onDefaultUsernameChange resets previous error state`() {
+        val presenter = createHomePresenter()
+        presenter.onDefaultUsernameChange()
+        verify { viewState.resetErrorState() }
+    }
+
+    @Test
     fun `on onDefaultUsernameChange displays loading while fetching profile info`() {
         val presenter = createHomePresenter()
         presenter.onDefaultUsernameChange()

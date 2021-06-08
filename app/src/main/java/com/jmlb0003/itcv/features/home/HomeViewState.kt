@@ -26,6 +26,8 @@ class HomeViewState {
     fun displayErrorMessage(@StringRes errorStringResource: Int) =
         errorState.postValue(HomeViewErrorState.ErrorStringRes(errorStringResource))
 
+    fun resetErrorState() = errorState.postValue(null)
+
     fun displayProfileName(profileName: String) = profileNameState.postValue(HomeViewStateList.Ready(profileName))
 
     fun displayBio(bio: String) = profileBioState.postValue(HomeViewStateList.Ready(bio))

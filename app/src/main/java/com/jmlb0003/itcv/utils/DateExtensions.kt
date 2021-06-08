@@ -1,6 +1,7 @@
 package com.jmlb0003.itcv.utils
 
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -12,5 +13,15 @@ object DateExtensions {
     private val shortDateFormat get() = SimpleDateFormat(SHORT_DATE_FORMAT, Locale.getDefault())
 
     fun Date.toShortDateString(): String = shortDateFormat.format(this)
+
+    fun Long.isOlderThanYesterday(): Boolean {
+        val yesterday = Calendar.getInstance(Locale.getDefault()).apply {
+            add(Calendar.HOUR, -24)
+        }
+        val thisDate = Calendar.getInstance(Locale.getDefault()).apply {
+            timeInMillis = this@isOlderThanYesterday
+        }
+        return thisDate < yesterday
+    }
 
 }

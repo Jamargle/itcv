@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Repo(
+    val id: String,
     val name: String,
     val description: String,
     val website: String,
