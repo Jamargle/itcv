@@ -7,8 +7,10 @@ import com.jmlb0003.itcv.data.model.Repo
 import com.jmlb0003.itcv.domain.exception.NoInsertedReposException
 import com.jmlb0003.itcv.domain.exception.NoReposException
 import com.jmlb0003.itcv.domain.exception.NoReposRemovedException
+import javax.inject.Inject
 
-class ReposLocalDataSource(
+class ReposLocalDataSource
+@Inject constructor(
     private val database: MyDataBase
 ) {
     // TODO clean cached repos after some period

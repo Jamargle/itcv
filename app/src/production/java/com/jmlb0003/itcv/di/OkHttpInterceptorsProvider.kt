@@ -1,12 +1,15 @@
 package com.jmlb0003.itcv.di
 
+import android.content.Context
 import com.jmlb0003.itcv.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class OkHttpInterceptorsProvider(
-    private val mainInjector: MainInjector
-) : InterceptorsProvider {
+@Singleton
+class OkHttpInterceptorsProvider
+@Inject constructor() : InterceptorsProvider {
 
     override fun getInterceptors(): List<Interceptor> =
         mutableListOf<Interceptor>().apply {
@@ -23,4 +26,4 @@ class OkHttpInterceptorsProvider(
         }
 }
 
-fun getInterceptorProvider(mainInjector: MainInjector) = OkHttpInterceptorsProvider(mainInjector)
+fun getInterceptorProvider(applicationContext: Context) = OkHttpInterceptorsProvider()

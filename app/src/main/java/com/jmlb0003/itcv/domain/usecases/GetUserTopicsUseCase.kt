@@ -7,8 +7,10 @@ import com.jmlb0003.itcv.domain.model.Repo
 import com.jmlb0003.itcv.domain.model.Topic
 import com.jmlb0003.itcv.domain.repositories.ReposRepository
 import com.jmlb0003.itcv.domain.repositories.TopicsRepository
+import javax.inject.Inject
 
-class GetUserTopicsUseCase(
+class GetUserTopicsUseCase
+@Inject constructor(
     private val reposRepository: ReposRepository,
     private val topicsRepository: TopicsRepository
 ) : UseCase<List<Topic>, GetUserTopicsUseCase.Input>() {

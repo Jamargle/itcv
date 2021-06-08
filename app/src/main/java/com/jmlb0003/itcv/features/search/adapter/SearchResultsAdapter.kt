@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.jmlb0003.itcv.R
+import javax.inject.Inject
 
-class SearchResultsAdapter(
+class SearchResultsAdapter
+@Inject constructor(
     private val onResultClicked: (SearchResult) -> Unit
 ) : ListAdapter<SearchResult, SearchResultViewHolder>(SearchResultDiffCallback) {
 

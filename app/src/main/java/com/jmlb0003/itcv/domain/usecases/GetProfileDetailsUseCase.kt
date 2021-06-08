@@ -6,8 +6,10 @@ import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.domain.model.ProfileDetails
 import com.jmlb0003.itcv.domain.repositories.ReposRepository
 import com.jmlb0003.itcv.domain.repositories.UserRepository
+import javax.inject.Inject
 
-class GetProfileDetailsUseCase(
+class GetProfileDetailsUseCase
+@Inject constructor(
     private val usersRepository: UserRepository,
     private val reposRepository: ReposRepository
 ) : UseCase<ProfileDetails, GetProfileDetailsUseCase.Input>() {

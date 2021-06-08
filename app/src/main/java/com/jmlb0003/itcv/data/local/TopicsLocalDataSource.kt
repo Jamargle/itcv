@@ -7,8 +7,10 @@ import com.jmlb0003.itcv.data.model.Topic
 import com.jmlb0003.itcv.domain.exception.NoInsertedTopicsException
 import com.jmlb0003.itcv.domain.exception.NoTopicsException
 import com.jmlb0003.itcv.domain.exception.NoTopicsRemovedException
+import javax.inject.Inject
 
-class TopicsLocalDataSource(
+class TopicsLocalDataSource
+@Inject constructor(
     private val database: MyDataBase
 ) {
     // TODO clean cached topics after some period

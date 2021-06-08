@@ -5,8 +5,10 @@ import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.repositories.UserRepository
+import javax.inject.Inject
 
-class SearchUseCase(
+class SearchUseCase
+@Inject constructor(
     private val usersRepository: UserRepository
 ) : UseCase<List<SearchResult>, SearchUseCase.Input>() {
 

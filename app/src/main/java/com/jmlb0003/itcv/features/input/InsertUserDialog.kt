@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.features.input
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +9,21 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.button.MaterialButton
+import com.jmlb0003.itcv.CustomApplication
 import com.jmlb0003.itcv.R
+import javax.inject.Inject
 
 class InsertUserDialog : DialogFragment() {
 
     init {
         isCancelable = false
     }
+
+    @Inject
+    lateinit var viewModel: InsertUserDialogViewModel
 
     // region view state observers
     private val onViewStateChanged = Observer<InsertUserDialogViewStateList> {
@@ -32,12 +37,15 @@ class InsertUserDialog : DialogFragment() {
     private var usernameField: EditText? = null
     private var doneButton: Button? = null
 
-    private val viewModel by viewModels<InsertUserDialogViewModel> { getInsertUserDialogViewModelFactory(this) }
-
     private var newUsername: MutableLiveData<String>? = null
 
     fun setUsernameChangeTrigger(usernameChangeObservable: MutableLiveData<String>) {
         newUsername = usernameChangeObservable
+    }
+
+    override fun onAttach(context: Context) {
+        initInsertUserDialogComponent(context)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -84,5 +92,13 @@ class InsertUserDialog : DialogFragment() {
 
     private fun handleDoneButtonStateChange(isEnabled: Boolean) {
         doneButton?.isEnabled = isEnabled
+    }
+
+    private fun initInsertUserDialogComponent(context: Context) {
+        (context.applicationContext as CustomApplication)
+            .appComponent
+            .inputUserDialogComponentFactory.create(this).also {
+                it.inject(this)
+            }
     }
 }

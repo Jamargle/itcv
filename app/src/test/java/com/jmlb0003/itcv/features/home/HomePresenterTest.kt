@@ -9,6 +9,7 @@ import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
 import com.jmlb0003.itcv.features.MainToolbarController
+import com.jmlb0003.itcv.features.NavigationTriggers
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk

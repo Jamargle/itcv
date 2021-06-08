@@ -4,11 +4,15 @@ import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.core.mvp.Presenter
+import com.jmlb0003.itcv.di.FragmentScope
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
 import com.jmlb0003.itcv.domain.usecases.UpdateDefaultUserUseCase
+import javax.inject.Inject
 
-class InsertUserDialogPresenter(
+@FragmentScope
+class InsertUserDialogPresenter
+@Inject constructor(
     private val viewState: InsertUserDialogViewState,
     private val getDefaultUserProfileUseCase: GetDefaultUserProfileUseCase,
     private val updateDefaultUserUseCase: UpdateDefaultUserUseCase,

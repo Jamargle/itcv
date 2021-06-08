@@ -65,7 +65,7 @@ class RepositoriesProvider(
     private val gsonUtils = GsonUtils
 
     private val okHttpInterceptorsProvider by lazy {
-        getInterceptorProvider(mainInjector)
+        getInterceptorProvider(mainInjector.applicationContext)
     }
 
     private val okHttpClientProvider by lazy {
@@ -77,7 +77,7 @@ class RepositoriesProvider(
     private val apiServiceGenerator by lazy {
         ApiServiceGenerator(
             okHttpClientProvider,
-            gsonUtils
+            gsonUtils.gsonConverter
         )
     }
 

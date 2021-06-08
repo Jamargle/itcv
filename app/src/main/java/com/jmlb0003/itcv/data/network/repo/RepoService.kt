@@ -8,8 +8,10 @@ import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.data.network.BaseService
 import com.jmlb0003.itcv.data.network.repo.response.RepoResponse
 import retrofit2.Response
+import javax.inject.Inject
 
-class RepoService(
+class RepoService
+@Inject constructor(
     private val repositoryApiClient: RepositoryApiClient,
     gson: Gson,
     networkHandler: NetworkHandler

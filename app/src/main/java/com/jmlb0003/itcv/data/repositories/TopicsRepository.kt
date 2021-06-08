@@ -8,9 +8,11 @@ import com.jmlb0003.itcv.data.repositories.mappers.TopicsMapper
 import com.jmlb0003.itcv.domain.model.Topic
 import com.jmlb0003.itcv.utils.DateExtensions.isOlderThanYesterday
 import java.util.Date
+import javax.inject.Inject
 import com.jmlb0003.itcv.domain.repositories.TopicsRepository as TopicsRepositoryInterface
 
-class TopicsRepository(
+class TopicsRepository
+@Inject constructor(
     private val topicsLocalDataSource: TopicsLocalDataSource,
     private val topicsService: TopicsService,
     private val topicsMappers: TopicsMapper

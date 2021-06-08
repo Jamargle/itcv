@@ -6,11 +6,16 @@ import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.interactor.UseCase
 import com.jmlb0003.itcv.core.mvp.Presenter
 import com.jmlb0003.itcv.data.MissingDefaultUserNameFailure
+import com.jmlb0003.itcv.di.FragmentScope
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetDefaultUserProfileUseCase
 import com.jmlb0003.itcv.features.MainToolbarController
+import com.jmlb0003.itcv.features.NavigationTriggers
+import javax.inject.Inject
 
-class HomePresenter(
+@FragmentScope
+class HomePresenter
+@Inject constructor(
     private val viewState: HomeViewState,
     private val mainToolbarController: MainToolbarController,
     private val navigationTriggers: NavigationTriggers,

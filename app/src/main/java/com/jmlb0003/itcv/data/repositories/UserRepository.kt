@@ -12,9 +12,11 @@ import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.utils.DateExtensions.isOlderThanYesterday
 import java.util.Date
+import javax.inject.Inject
 import com.jmlb0003.itcv.domain.repositories.UserRepository as UserRepositoryInterface
 
-class UserRepository(
+class UserRepository
+@Inject constructor(
     private val sharedPreferencesHandler: SharedPreferencesHandler,
     private val userLocalDataSource: UserLocalDataSource,
     private val userService: UserService,

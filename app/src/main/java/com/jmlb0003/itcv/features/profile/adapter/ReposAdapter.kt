@@ -4,10 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.jmlb0003.itcv.R
+import com.jmlb0003.itcv.features.profile.di.REPO_URL_BUTTON_CLICKED
+import com.jmlb0003.itcv.features.profile.di.WEBSITE_BUTTON_CLICKED
+import javax.inject.Inject
+import javax.inject.Named
 
-class ReposAdapter(
-    private val onWebSiteButtonClicked: (String) -> Unit,
-    private val onRepoUrlButtonClicked: (String) -> Unit,
+class ReposAdapter
+@Inject constructor(
+    @Named(WEBSITE_BUTTON_CLICKED) private val onWebSiteButtonClicked: (String) -> Unit,
+    @Named(REPO_URL_BUTTON_CLICKED) private val onRepoUrlButtonClicked: (String) -> Unit,
 ) : ListAdapter<RepoListItem, RepoViewHolder>(ReposDiffCallback) {
 
     fun setRepositories(repositories: List<RepoListItem>) {

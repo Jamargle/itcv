@@ -8,9 +8,11 @@ import com.jmlb0003.itcv.data.repositories.mappers.ReposMappers
 import com.jmlb0003.itcv.domain.model.Repo
 import com.jmlb0003.itcv.utils.DateExtensions.isOlderThanYesterday
 import java.util.Date
+import javax.inject.Inject
 import com.jmlb0003.itcv.domain.repositories.ReposRepository as ReposRepositoryInterface
 
-class ReposRepository(
+class ReposRepository
+@Inject constructor(
     private val reposLocalDataSource: ReposLocalDataSource,
     private val repoService: RepoService,
     private val reposMappers: ReposMappers

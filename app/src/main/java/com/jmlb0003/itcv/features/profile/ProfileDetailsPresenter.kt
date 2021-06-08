@@ -3,17 +3,21 @@ package com.jmlb0003.itcv.features.profile
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.mvp.Presenter
+import com.jmlb0003.itcv.di.FragmentScope
 import com.jmlb0003.itcv.domain.model.ProfileDetails
 import com.jmlb0003.itcv.domain.model.Topic
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
 import com.jmlb0003.itcv.domain.usecases.GetUserTopicsUseCase
-import com.jmlb0003.itcv.features.home.NavigationTriggers
+import com.jmlb0003.itcv.features.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.adapter.RepositoryMappers.toRepositoryListItem
 import com.jmlb0003.itcv.features.profile.adapter.TopicMappers
 import com.jmlb0003.itcv.utils.DateExtensions.toShortDateString
+import javax.inject.Inject
 
-class ProfileDetailsPresenter(
+@FragmentScope
+class ProfileDetailsPresenter
+@Inject constructor(
     private val viewState: ProfileDetailsViewState,
     private val navigationTriggers: NavigationTriggers,
     private val getProfileDetailsUseCase: GetProfileDetailsUseCase,

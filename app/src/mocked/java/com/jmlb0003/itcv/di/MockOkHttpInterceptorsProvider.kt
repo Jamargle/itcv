@@ -4,13 +4,19 @@ import android.content.Context
 import com.jmlb0003.itcv.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MockOkHttpInterceptorsProvider(private val mainInjector: MainInjector) : InterceptorsProvider {
+@Singleton
+class MockOkHttpInterceptorsProvider
+@Inject constructor(
+    private val applicationContext: Context
+) : InterceptorsProvider {
 
     override fun getInterceptors(): List<Interceptor> =
         mutableListOf<Interceptor>().apply {
             getLoggingInterceptorIfDebug()?.let { add(it) }
-            add(getMockedBackendInterceptor(mainInjector.applicationContext))
+            add(getMockedBackendInterceptor(applicationContext))
         }
 
     private fun getLoggingInterceptorIfDebug() =
@@ -29,4 +35,4 @@ class MockOkHttpInterceptorsProvider(private val mainInjector: MainInjector) : I
         )
 }
 
-fun getInterceptorProvider(mainInjector: MainInjector) = MockOkHttpInterceptorsProvider(mainInjector)
+fun getInterceptorProvider(applicationContext: Context) = MockOkHttpInterceptorsProvider(applicationContext)

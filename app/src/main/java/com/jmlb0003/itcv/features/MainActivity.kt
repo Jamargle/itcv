@@ -17,7 +17,6 @@ import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.core.livedata.ConsumingObserver
 import com.jmlb0003.itcv.core.tryToOpenUrl
 import com.jmlb0003.itcv.domain.model.User
-import com.jmlb0003.itcv.features.home.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.ProfileDetailsFragment
 
 class MainActivity : AppCompatActivity() {
