@@ -5,10 +5,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresPermission
+import javax.inject.Inject
 
 class NetworkHandler
 @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
-constructor(
+@Inject constructor(
     private val context: Context
 ) {
 

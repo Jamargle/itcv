@@ -2,8 +2,12 @@ package com.jmlb0003.itcv.features.home
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
+import com.jmlb0003.itcv.di.FragmentScope
+import javax.inject.Inject
 
-class HomeViewState {
+@FragmentScope
+class HomeViewState
+@Inject constructor() {
 
     val loadingState: MutableLiveData<Boolean> = MutableLiveData(true)
     val profileNameState: MutableLiveData<HomeViewStateList> = MutableLiveData()

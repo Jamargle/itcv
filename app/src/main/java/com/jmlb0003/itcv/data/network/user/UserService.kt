@@ -9,8 +9,10 @@ import com.jmlb0003.itcv.data.network.BaseService
 import com.jmlb0003.itcv.data.network.user.response.UserResponse
 import com.jmlb0003.itcv.data.network.user.response.search.SearchUserResponse
 import retrofit2.Response
+import javax.inject.Inject
 
-class UserService(
+class UserService
+@Inject constructor(
     private val userApiClient: UserApiClient,
     gson: Gson,
     networkHandler: NetworkHandler

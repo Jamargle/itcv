@@ -1,9 +1,13 @@
 package com.jmlb0003.itcv.features.search
 
 import androidx.lifecycle.MutableLiveData
+import com.jmlb0003.itcv.di.FragmentScope
 import com.jmlb0003.itcv.features.search.adapter.SearchResult
+import javax.inject.Inject
 
-class SearchViewState {
+@FragmentScope
+class SearchViewState
+@Inject constructor() {
 
     val viewState: MutableLiveData<SearchViewStateList> = MutableLiveData()
 

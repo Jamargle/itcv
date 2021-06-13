@@ -6,7 +6,7 @@ import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.SearchUseCase
-import com.jmlb0003.itcv.features.home.NavigationTriggers
+import com.jmlb0003.itcv.features.NavigationTriggers
 import com.jmlb0003.itcv.features.search.adapter.SearchResultMappers
 import io.mockk.called
 import io.mockk.every

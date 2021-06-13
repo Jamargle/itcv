@@ -3,15 +3,19 @@ package com.jmlb0003.itcv.features.search
 import com.jmlb0003.itcv.core.coroutines.Dispatchers
 import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.core.mvp.Presenter
+import com.jmlb0003.itcv.di.FragmentScope
 import com.jmlb0003.itcv.domain.model.SearchResult
 import com.jmlb0003.itcv.domain.usecases.SearchUseCase
-import com.jmlb0003.itcv.features.home.NavigationTriggers
+import com.jmlb0003.itcv.features.NavigationTriggers
 import com.jmlb0003.itcv.features.search.adapter.SearchResultMappers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import com.jmlb0003.itcv.features.search.adapter.SearchResult as ResultListItem
 
-class SearchPresenter(
+@FragmentScope
+class SearchPresenter
+@Inject constructor(
     private val viewState: SearchViewState,
     private val navigationTriggers: NavigationTriggers,
     private val searchUseCase: SearchUseCase,

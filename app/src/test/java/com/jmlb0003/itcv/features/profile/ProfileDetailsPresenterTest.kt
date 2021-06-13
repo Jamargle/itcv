@@ -11,7 +11,7 @@ import com.jmlb0003.itcv.domain.repositories.TopicsRepository
 import com.jmlb0003.itcv.domain.repositories.UserRepository
 import com.jmlb0003.itcv.domain.usecases.GetProfileDetailsUseCase
 import com.jmlb0003.itcv.domain.usecases.GetUserTopicsUseCase
-import com.jmlb0003.itcv.features.home.NavigationTriggers
+import com.jmlb0003.itcv.features.NavigationTriggers
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
 import com.jmlb0003.itcv.features.profile.adapter.TopicListItem
 import com.jmlb0003.itcv.features.profile.adapter.TopicMappers
@@ -158,6 +158,7 @@ class ProfileDetailsPresenterTest {
             )
             every { userRepository.getUser(userName) } returns Either.Right(expectedUser)
             every { reposRepository.getUserRepositories(userName) } returns Either.Right(listOf(expectedRepository))
+            every { topicsRepository.getRepositoryTopics(any(), any(), userName) } returns Either.Right(emptyList())
 
             presenter.onViewReady(args)
 

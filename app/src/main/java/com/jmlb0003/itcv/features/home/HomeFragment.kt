@@ -1,22 +1,27 @@
 package com.jmlb0003.itcv.features.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentOnAttachListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.jmlb0003.itcv.CustomApplication
 import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.features.input.InsertUserDialog
 import com.jmlb0003.itcv.utils.showErrorPopup
+import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
+
+    @Inject
+    lateinit var viewModel: HomeViewModel
 
     // region view state observers
     private val onLoadingStateChange = Observer<Boolean> { isToBeShown ->
@@ -50,7 +55,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var twitterUserName: TextView? = null
     // endregion
 
-    private val viewModel by viewModels<HomeViewModel> { getHomeViewModelFactory(this) }
+    override fun onAttach(context: Context) {
+        initHomeComponent(context)
+        super.onAttach(context)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViews(view)
@@ -208,4 +216,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
     // endregion
+
+    private fun initHomeComponent(context: Context) {
+        (context.applicationContext as CustomApplication)
+            .appComponent
+            .homeComponentFactory.create(this).also {
+                it.inject(this)
+            }
+    }
 }

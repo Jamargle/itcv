@@ -8,8 +8,10 @@ import com.jmlb0003.itcv.core.exception.Failure
 import com.jmlb0003.itcv.data.network.BaseService
 import com.jmlb0003.itcv.data.network.topic.response.TopicsResponse
 import retrofit2.Response
+import javax.inject.Inject
 
-class TopicsService(
+class TopicsService
+@Inject constructor(
     private val topicsApiClient: TopicsApiClient,
     networkHandler: NetworkHandler,
     gson: Gson

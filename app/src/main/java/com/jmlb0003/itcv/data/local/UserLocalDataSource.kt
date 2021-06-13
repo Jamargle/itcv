@@ -7,8 +7,10 @@ import com.jmlb0003.itcv.data.model.User
 import com.jmlb0003.itcv.domain.exception.NoInsertedUserException
 import com.jmlb0003.itcv.domain.exception.NoUserException
 import com.jmlb0003.itcv.domain.exception.NoUserRemovedException
+import javax.inject.Inject
 
-class UserLocalDataSource(
+class UserLocalDataSource
+@Inject constructor(
     private val database: MyDataBase
 ) {
     // TODO clean cached users after some period

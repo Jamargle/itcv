@@ -1,4 +1,4 @@
-package com.jmlb0003.itcv.features.home
+package com.jmlb0003.itcv.features
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

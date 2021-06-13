@@ -1,8 +1,12 @@
 package com.jmlb0003.itcv.features.input
 
 import androidx.lifecycle.MutableLiveData
+import com.jmlb0003.itcv.di.FragmentScope
+import javax.inject.Inject
 
-class InsertUserDialogViewState {
+@FragmentScope
+class InsertUserDialogViewState
+@Inject constructor() {
 
     val viewState = MutableLiveData<InsertUserDialogViewStateList>()
     val doneButtonState = MutableLiveData(false)

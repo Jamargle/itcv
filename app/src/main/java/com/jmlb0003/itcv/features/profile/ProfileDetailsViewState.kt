@@ -1,10 +1,14 @@
 package com.jmlb0003.itcv.features.profile
 
 import androidx.lifecycle.MutableLiveData
+import com.jmlb0003.itcv.di.FragmentScope
 import com.jmlb0003.itcv.features.profile.adapter.RepoListItem
 import com.jmlb0003.itcv.features.profile.adapter.TopicListItem
+import javax.inject.Inject
 
-class ProfileDetailsViewState {
+@FragmentScope
+class ProfileDetailsViewState
+@Inject constructor() {
 
     val profileRepositories: MutableLiveData<RepositoriesStateList> = MutableLiveData()
     val profileTopics: MutableLiveData<TopicsStateList> = MutableLiveData()

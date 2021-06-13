@@ -82,6 +82,11 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.retrofitLoggingInterceptorVersion"
     //endregion
 
+    //region Dagger 2
+    implementation "com.google.dagger:dagger:$versions.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$versions.daggerVersion"
+    //endregion
+
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"

@@ -1,5 +1,6 @@
 package com.jmlb0003.itcv.features.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -7,19 +8,26 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.jmlb0003.itcv.CustomApplication
 import com.jmlb0003.itcv.R
 import com.jmlb0003.itcv.domain.model.User
 import com.jmlb0003.itcv.features.MainToolbarController
 import com.jmlb0003.itcv.features.profile.adapter.ReposAdapter
 import com.jmlb0003.itcv.features.profile.adapter.TopicListItem
 import com.jmlb0003.itcv.utils.showErrorPopup
+import javax.inject.Inject
 
 class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
+
+    @Inject
+    lateinit var viewModel: ProfileDetailsViewModel
+
+    @Inject
+    lateinit var reposAdapter: ReposAdapter
 
     // region view state observers
     private val onUserNameChange = Observer<ProfileDetailsStateList> { handleUserNameChange(it) }
@@ -50,8 +58,10 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     private var repositoryList: RecyclerView? = null
     // endregion
 
-    private val viewModel by viewModels<ProfileDetailsViewModel> { getProfileDetailsViewModelFactory() }
-    private var reposAdapter: ReposAdapter? = null
+    override fun onAttach(context: Context) {
+        initProfileDetailsComponent(context)
+        super.onAttach(context)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,10 +129,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun initRepositoryListView(rootView: View) {
         rootView.findViewById<RecyclerView>(R.id.repository_list)?.let { recyclerView ->
-            recyclerView.adapter = ReposAdapter(
-                onWebSiteButtonClicked = { viewModel.presenter.onRepoWebsiteClicked(it) },
-                onRepoUrlButtonClicked = { viewModel.presenter.onRepoGithubUrlClicked(it) }
-            ).also { reposAdapter = it }
+            recyclerView.adapter = reposAdapter
         }
     }
 
@@ -212,7 +219,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
     private fun handleReposChange(state: RepositoriesStateList) {
         when (state) {
             RepositoriesStateList.Loading -> displayRepositoriesLoading()
-            is RepositoriesStateList.Ready -> reposAdapter?.setRepositories(state.repositories)
+            is RepositoriesStateList.Ready -> reposAdapter.setRepositories(state.repositories)
             RepositoriesStateList.Hidden -> hideRepositoriesView()
         }
         if (state != RepositoriesStateList.Loading) {
@@ -273,6 +280,18 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun hideTopicsView() {
         topicList?.visibility = View.GONE
+    }
+
+    private fun initProfileDetailsComponent(context: Context) {
+        (context.applicationContext as CustomApplication)
+            .appComponent
+            .profileDetailsComponentFactory.create(
+                this,
+                onWebSiteButtonClicked = { viewModel.presenter.onRepoWebsiteClicked(it) },
+                onRepoUrlButtonClicked = { viewModel.presenter.onRepoGithubUrlClicked(it) }
+            ).also {
+                it.inject(this)
+            }
     }
 
     companion object {
