@@ -158,6 +158,7 @@ class ProfileDetailsPresenterTest {
             )
             every { userRepository.getUser(userName) } returns Either.Right(expectedUser)
             every { reposRepository.getUserRepositories(userName) } returns Either.Right(listOf(expectedRepository))
+            every { topicsRepository.getRepositoryTopics(any(), any(), userName) } returns Either.Right(emptyList())
 
             presenter.onViewReady(args)
 
